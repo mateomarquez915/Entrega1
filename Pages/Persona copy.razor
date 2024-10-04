@@ -1,0 +1,494 @@
+@page "/persona1"
+<!--
+Define la URL relativa que carga este componente. En este caso, cuando un usuario navega a "/persona",
+este componente Blazor se carga y se representa en la página.
+-->
+@using BlazorFrontEnd.Services
+<!--
+// Importa el espacio de nombres BlazorFrontEnd.Services para que puedas utilizar los servicios dentro de este componente.
+-->
+@inject ApiService ApiService
+<!--
+// Inyecta una instancia del servicio ApiService. Esto permite que el componente llame a la API a través de este servicio.
+-->
+@inject IJSRuntime JSRuntime
+<!--
+// Inyecta IJSRuntime, que es un servicio Blazor para ejecutar JavaScript desde C#.
+-->
+<div class="container-xl">
+    <div class="table-responsive">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h2>Gestionar <b>Personas</b></h2>
+                        <!-- Título de la tabla que indica que se trata de la gestión de personas -->
+                    </div>
+                    <div class="col-sm-6">
+                        <a href="#addPersonaModal" class="btn btn-success" data-bs-toggle="modal" @onclick="() => PrepareForAddOrEdit()">
+                            <i class="material-icons">&#xE147;</i> <span>Añadir Nueva Persona</span>
+                        </a>
+                        <!-- Botón que abre el modal para añadir una nueva persona -->
+ 
+                        <a href="#consultarPersonaModal" class="btn btn-success" data-bs-toggle="modal" @onclick="PrepareForConsulta">
+                            <i class="material-icons">&#xE8B6;</i> <span>Consultar Persona</span>
+                        </a>
+                        <!-- Botón que abre el modal para consultar una persona existente -->
+                    </div>
+                </div>
+            </div>
+            @if (personas == null)
+            {
+                <p>Cargando...</p>
+                <!-- Muestra un mensaje mientras se cargan los datos -->
+            }
+            else if (!personas.Any())
+            {
+                <p>No hay personas registradas.</p>
+                <!-- Muestra un mensaje si no hay personas en la lista -->
+            }
+            else
+            {
+                <!-- Muestra la tabla con la lista de personas si la lista contiene datos -->
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Nombre</th>
+                            <th>Email</th>
+                            <th>Teléfono</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var persona in personas)
+                        {
+                            <tr>
+                                <td>@persona["codigo"]</td>
+                                <!-- Muestra el código de la persona -->
+                                <td>@persona["nombre"]</td>
+                                <!-- Muestra el nombre de la persona -->
+                                <td>@persona["email"]</td>
+                                <!-- Muestra el email de la persona -->
+                                <td>@persona["telefono"]</td>
+                                <!-- Muestra el teléfono de la persona -->
+                                <td>
+                                    <a href="#editPersonaModal" class="edit" data-bs-toggle="modal" @onclick="() => PrepareForAddOrEdit(persona)">
+                                        <i class="material-icons" data-bs-toggle="tooltip" title="Editar">&#xE254;</i>
+                                    </a>
+                                    <!-- Botón para editar la persona -->
+ 
+                                    <a href="#deletePersonaModal" class="delete" data-bs-toggle="modal" @onclick="() => SetPersonaToDelete(persona)">
+                                        <i class="material-icons" data-bs-toggle="tooltip" title="Eliminar">&#xE872;</i>
+                                    </a>
+                                    <!-- Botón para eliminar la persona -->
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    </div>
+</div>
+ 
+<!-- Modal para Añadir/Editar Persona -->
+<div class="modal fade" id="addPersonaModal" tabindex="-1" role="dialog" aria-labelledby="addPersonaModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <EditForm Model="@currentPersona" OnValidSubmit="SavePersona">
+                <DataAnnotationsValidator />
+                <!-- Valida los campos del formulario usando anotaciones de datos en C# -->
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addPersonaModalLabel">@(isNewPersona ? "Añadir" : "Editar") Persona</h5>
+                    <!-- El título del modal cambia según si se está añadiendo o editando una persona -->
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Campos del formulario para ingresar los datos de la persona -->
+                    <div class="form-group">
+                        <label>Código</label>
+                        <InputText class="form-control" @bind-Value="codigo" />
+                        <ValidationMessage For="@(() => codigo)" />
+                        <!-- Campo para ingresar el código de la persona -->
+                    </div>
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <InputText class="form-control" @bind-Value="nombre" />
+                        <ValidationMessage For="@(() => nombre)" />
+                        <!-- Campo para ingresar el nombre de la persona -->
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <InputText class="form-control" @bind-Value="email"  @oninput="ValidateEmail" />
+                        <ValidationMessage For="@(() => email)" />
+                        @if (!string.IsNullOrEmpty(emailErrorMessage))
+                         {
+                            <div class="text-danger">@emailErrorMessage</div>
+                         }
+                        <!-- Campo para ingresar el email de la persona -->
+                    </div>
+                    <div class="form-group">
+                        <label>Teléfono</label>
+                        <InputText class="form-control" @bind-Value="telefono" />
+                        <ValidationMessage For="@(() => telefono)" />
+                        <!-- Campo para ingresar el teléfono de la persona -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">@(isNewPersona ? "Añadir" : "Guardar")</button>
+                    <!-- Botón de acción que cambia según si se está añadiendo o guardando -->
+                </div>
+            </EditForm>
+        </div>
+    </div>
+</div>
+ 
+<!-- Modal para Eliminar Persona -->
+<div class="modal fade" id="deletePersonaModal" tabindex="-1" role="dialog" aria-labelledby="deletePersonaModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deletePersonaModalLabel">Eliminar Persona</h5>
+                <!-- Título del modal para eliminar una persona -->
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>¿Está seguro de que desea eliminar esta persona?</p>
+                <p class="text-warning"><small>Esta acción no se puede deshacer.</small></p>
+                <!-- Mensaje de advertencia para la eliminación -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" @onclick="DeletePersona">Eliminar</button>
+                <!-- Botón para confirmar la eliminación de la persona -->
+            </div>
+        </div>
+    </div>
+</div>
+ 
+<!-- Modal para Consultar Persona -->
+<div class="modal fade" id="consultarPersonaModal" tabindex="-1" role="dialog" aria-labelledby="consultarPersonaModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="consultarPersonaModalLabel">Consultar Persona</h5>
+                <!-- Título del modal para consultar una persona -->
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Campos para ingresar el código y mostrar la información de la persona consultada -->
+                <div class="form-group">
+                    <label>Código</label>
+                    <input type="text" class="form-control" @bind="consultaCodigo" @bind:event="oninput" />
+                    <!-- Campo para ingresar el código de la persona a consultar -->
+                </div>
+                <div class="form-group">
+                    <label>Nombre</label>
+                    <input type="text" class="form-control" @bind="consultaNombre" readonly />
+                    <!-- Campo para mostrar el nombre de la persona consultada, es de solo lectura -->
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="text" class="form-control" @bind="consultaEmail" readonly />
+                    <!-- Campo para mostrar el email de la persona consultada, es de solo lectura -->
+                </div>
+                <div class="form-group">
+                    <label>Teléfono</label>
+                    <input type="text" class="form-control" @bind="consultaTelefono" readonly />
+                    <!-- Campo para mostrar el teléfono de la persona consultada, es de solo lectura -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" @onclick="ConsultarPersona">Consultar</button>
+                <!-- Botón para realizar la consulta de la persona con el código ingresado -->
+                <button type="button" class="btn btn-warning" @onclick="ModificarPersonaConsultada" disabled="@(!personaEncontrada)">Modificar</button>
+                <!-- Botón para modificar la persona consultada si fue encontrada -->
+                <button type="button" class="btn btn-danger" @onclick="EliminarPersonaConsultada" disabled="@(!personaEncontrada)">Eliminar</button>
+                <!-- Botón para eliminar la persona consultada si fue encontrada -->
+            </div>
+        </div>
+    </div>
+</div>
+ 
+@code {
+   
+    private List<Dictionary<string, object>> personas = new List<Dictionary<string, object>>();
+    // Lista que almacena las personas obtenidas desde la API
+   
+    private Dictionary<string, object> currentPersona = new Dictionary<string, object>();
+    // Diccionario que representa la persona actual que se está añadiendo o editando
+ 
+    private bool isNewPersona = true;
+    // Bandera que indica si se está añadiendo una nueva persona o editando una existente
+ 
+    private bool personaEncontrada = false;
+    // Bandera que indica si una persona fue encontrada durante la consulta
+ 
+    private string codigo = "";
+    // Variable que almacena el código de la persona durante la edición o creación
+ 
+    private string nombre = "";
+    // Variable que almacena el nombre de la persona durante la edición o creación
+ 
+    private string email = "";
+    // Variable que almacena el email de la persona durante la edición o creación
+ 
+    private string telefono = "";
+    // Variable que almacena el teléfono de la persona durante la edición o creación
+ 
+    private string consultaCodigo = "";
+    // Variable que almacena el código de la persona que se va a consultar
+ 
+    private string consultaNombre = "";
+    // Variable que almacena el nombre de la persona que se encontró durante la consulta
+ 
+    private string consultaEmail = "";
+    // Variable que almacena el email de la persona que se encontró durante la consulta
+ 
+    private string consultaTelefono = "";
+    // Variable que almacena el teléfono de la persona que se encontró durante la consulta
+ 
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadPersonas();
+        // Método que se ejecuta al inicializar el componente. Carga la lista de personas desde la API.
+    }
+ 
+    private async Task LoadPersonas()
+    {
+        try
+        {
+            personas = await ApiService.GetDataAsync("api/proyecto/persona");
+            // Llama a la API para obtener la lista de personas y la almacena en la variable 'personas'.
+            StateHasChanged();
+            // Fuerza la actualización de la UI después de cargar los datos.
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al cargar personas: {ex.Message}");
+            // Muestra un error en la consola si la carga de personas falla.
+            await JSRuntime.InvokeVoidAsync("alert", "Error al cargar personas. Por favor, intente nuevamente.");
+            // Muestra una alerta en la página indicando que hubo un error al cargar las personas.
+        }
+    }
+ 
+    private void PrepareForAddOrEdit(Dictionary<string, object>? persona = null)
+    {
+        isNewPersona = persona == null;
+        // Si 'persona' es null, significa que estamos añadiendo una nueva persona. De lo contrario, estamos editando.
+        currentPersona = persona ?? new Dictionary<string, object>();
+        // Si 'persona' es null, inicializamos un nuevo diccionario. De lo contrario, usamos el diccionario de la persona seleccionada.
+ 
+        codigo = currentPersona.TryGetValue("codigo", out var c) ? c?.ToString() ?? "" : "";
+        nombre = currentPersona.TryGetValue("nombre", out var n) ? n?.ToString() ?? "" : "";
+        email = currentPersona.TryGetValue("email", out var e) ? e?.ToString() ?? "" : "";
+        telefono = currentPersona.TryGetValue("telefono", out var t) ? t?.ToString() ?? "" : "";
+        // Extrae los valores de 'codigo', 'nombre', 'email' y 'telefono' de 'currentPersona' y los asigna a las variables correspondientes.
+ 
+        JSRuntime.InvokeVoidAsync("showModal", "addPersonaModal");
+        // Muestra el modal para añadir o editar persona usando JavaScript.
+    }
+ 
+    private void PrepareForConsulta()
+    {
+        consultaCodigo = "";
+        consultaNombre = "";
+        consultaEmail = "";
+        consultaTelefono = "";
+        personaEncontrada = false;
+        // Limpia los campos de consulta y establece 'personaEncontrada' en false.
+    }
+ 
+    private void SetPersonaToDelete(Dictionary<string, object> persona)
+    {
+        currentPersona = persona;
+        // Establece la persona actual como la persona a eliminar.
+        JSRuntime.InvokeVoidAsync("showModal", "deletePersonaModal");
+        // Muestra el modal para confirmar la eliminación usando JavaScript.
+ 
+ 
+    }
+    private string? emailErrorMessage;
+ 
+    private void ValidateEmail(ChangeEventArgs e)
+{
+    // Asigna el valor de forma segura, manejando posibles nulos
+    email = e.Value?.ToString() ?? string.Empty;
+ 
+    // Regex para validar el formato del correo
+    var emailPattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
+ 
+    // Comprobar si el email coincide con el patrón
+    if (!System.Text.RegularExpressions.Regex.IsMatch(email, emailPattern))
+    {
+        // Si no es válido, podrías establecer un mensaje de error
+        emailErrorMessage = "El formato del correo electrónico no es válido.";
+    }
+    else
+    {
+        emailErrorMessage = null; // Resetea el mensaje si es válido
+    }
+}
+ 
+ 
+    private async Task SavePersona()
+    {
+        try
+        {
+            currentPersona["codigo"] = codigo;
+            currentPersona["nombre"] = nombre;
+            currentPersona["email"] = email;
+            currentPersona["telefono"] = telefono;
+            // Actualiza 'currentPersona' con los valores actuales de los campos de entrada.
+ 
+            bool success;
+            if (isNewPersona)
+            {
+                success = await ApiService.AddEntityAsync("api/proyecto/persona", currentPersona);
+                await LoadPersonas();
+               
+                // Si estamos añadiendo una nueva persona, llama a la API para añadir la nueva persona.
+            }
+            else
+            {
+                success = await ApiService.EditEntityAsync("api/proyecto/persona/codigo", codigo, currentPersona);
+                await LoadPersonas();
+                // Si estamos editando una persona existente, llama a la API para editarla.
+            }
+ 
+            if (success)
+            {
+ 
+                await JSRuntime.InvokeVoidAsync("hideModal", "addPersonaModal");
+                // Si la operación tiene éxito, cierra el modal.
+ 
+                await LoadPersonas();
+                // Recarga la lista de personas para reflejar los cambios.
+ 
+                codigo = nombre = email = telefono = string.Empty;
+                currentPersona = new Dictionary<string, object>();
+                isNewPersona = true;
+                // Limpia los campos del formulario y restablece el estado.
+ 
+                StateHasChanged();
+               
+                // Fuerza la actualización de la UI.
+               
+               await LoadPersonas();
+ 
+                await JSRuntime.InvokeVoidAsync("alert", "Operación realizada con éxito1.");
+               
+               
+                // Muestra un mensaje de éxito al usuario.
+            }
+            else
+            {
+                await JSRuntime.InvokeVoidAsync("alert", "Error al guardar la persona. Por favor, intente nuevamente.");
+                // Si la operación falla, muestra un mensaje de error.
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al guardar persona: {ex.Message}");
+            await JSRuntime.InvokeVoidAsync("alert", "Error al guardar la persona. Por favor, intente nuevamente.");
+            // Muestra un error en la consola y una alerta si hay una excepción durante el guardado.
+        }
+    }
+ 
+    private async Task DeletePersona()
+    {
+        try
+        {
+            if (currentPersona.TryGetValue("codigo", out var codigoObj) && codigoObj is string codigoStr)
+            {
+               
+                bool success = await ApiService.DeleteEntityAsync("api/proyecto/persona/codigo", codigoStr);
+                // Si se encuentra el código de la persona actual, llama a la API para eliminarla.
+                if (success)
+                {
+                    await JSRuntime.InvokeVoidAsync("hideModal", "deletePersonaModal");
+                    await LoadPersonas();
+                    await JSRuntime.InvokeVoidAsync("alert", "Persona eliminada con éxito.");
+                    // Si la operación tiene éxito, cierra el modal, recarga la lista de personas y muestra un mensaje de éxito.
+                }
+                else
+                {
+                   
+                    await JSRuntime.InvokeVoidAsync("alert", "Error al eliminar laa persona. Por favor, intente nuevamente.");
+                    // Si la operación falla, muestra un mensaje de error.
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al eliminar persona: {ex.Message}");
+            await JSRuntime.InvokeVoidAsync("alert", "Error al eliminar la personita. Por favor, intente nuevamente.");
+            // Muestra un error en la consola y una alerta si hay una excepción durante la eliminación.
+        }
+    }
+ 
+    private async Task ConsultarPersona()
+    {
+        try
+        {
+            var resultado = await ApiService.GetDataAsync($"api/proyecto/persona/codigo/{consultaCodigo}");
+            if (resultado.Any())
+            {
+                var personaConsultada = resultado.First();
+                consultaNombre = personaConsultada["nombre"]?.ToString() ?? "";
+                consultaEmail = personaConsultada["email"]?.ToString() ?? "";
+                consultaTelefono = personaConsultada["telefono"]?.ToString() ?? "";
+                personaEncontrada = true;
+                // Si se encuentra una persona con el código consultado, muestra los datos en los campos correspondientes.
+            }
+            else
+            {
+                consultaNombre = "";
+                consultaEmail = "";
+                consultaTelefono = "";
+                personaEncontrada = false;
+                await JSRuntime.InvokeVoidAsync("alert", "No se encontró ninguna persona con ese código.");
+                // Si no se encuentra ninguna persona, limpia los campos y muestra un mensaje de alerta.
+            }
+            StateHasChanged();
+            // Fuerza la actualización de la UI para reflejar los cambios.
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al consultar persona: {ex.Message}");
+            await JSRuntime.InvokeVoidAsync("alert", "Error al consultar la persona. Por favor, intente nuevamente.");
+            // Muestra un error en la consola y una alerta si hay una excepción durante la consulta.
+        }
+    }
+ 
+    private async Task ModificarPersonaConsultada()
+    {
+        PrepareForAddOrEdit(new Dictionary<string, object>
+        {
+            ["codigo"] = consultaCodigo,
+            ["nombre"] = consultaNombre,
+            ["email"] = consultaEmail,
+            ["telefono"] = consultaTelefono
+        });
+        await JSRuntime.InvokeVoidAsync("hideModal", "consultarPersonaModal");
+        // Prepara los datos consultados para la edición y cierra el modal de consulta.
+    }
+ 
+    private async Task EliminarPersonaConsultada()
+    {
+        SetPersonaToDelete(new Dictionary<string, object>
+        {
+            ["codigo"] = consultaCodigo,
+            ["nombre"] = consultaNombre,
+            ["email"] = consultaEmail,
+            ["telefono"] = consultaTelefono
+        });
+        await JSRuntime.InvokeVoidAsync("hideModal", "consultarPersonaModal");
+        // Prepara los datos consultados para la eliminación y cierra el modal de consulta.
+    }
+   
+}
+ 
