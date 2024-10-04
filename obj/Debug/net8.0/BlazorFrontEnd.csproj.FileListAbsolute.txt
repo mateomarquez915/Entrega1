@@ -6184,3 +6184,4 @@ C:\Users\Mateo Marquez\Desktop\proyectosVSCODE\BlazorFrontEnd\obj\Debug\net8.0\B
 C:\Users\Mateo Marquez\Desktop\proyectosVSCODE\BlazorFrontEnd\obj\Debug\net8.0\refint\BlazorFrontEnd.dll
 C:\Users\Mateo Marquez\Desktop\proyectosVSCODE\BlazorFrontEnd\obj\Debug\net8.0\BlazorFrontEnd.pdb
 C:\Users\Mateo Marquez\Desktop\proyectosVSCODE\BlazorFrontEnd\obj\Debug\net8.0\ref\BlazorFrontEnd.dll
+C:\Users\Mateo Marquez\Desktop\proyectosVSCODE\BlazorFrontEnd\obj\Debug\net8.0\BlazorFrontEnd.sourcelink.json
