@@ -1,0 +1,429 @@
+@page "/termino_clave"
+<!--
+Define la URL relativa que carga este componente. En este caso, cuando un usuario navega a "/termino_clave",
+este componente Blazor se carga y se representa en la página.
+-->
+@using BlazorFrontEnd.Services
+<!--
+// Importa el espacio de nombres BlazorFrontEnd.Services para que puedas utilizar los servicios dentro de este componente.
+-->
+@inject ApiService ApiService
+<!--
+// Inyecta una instancia del servicio ApiService. Esto permite que el componente llame a la API a través de este servicio.
+-->
+@inject IJSRuntime JSRuntime
+<!--
+// Inyecta IJSRuntime, que es un servicio Blazor para ejecutar JavaScript desde C#.
+-->
+<div class="container-xl">
+    <div class="table-responsive">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h2>Gestionar <b>Terminos Claves</b></h2>
+                        <!-- Título de la tabla que indica que se trata de la gestión de terminos claves -->
+                    </div>
+                    <div class="col-sm-6">
+                        <a href="#addTermino_claveModal" class="btn btn-success" data-bs-toggle="modal" @onclick="() => PrepareForAddOrEdit()">
+                            <i class="material-icons">&#xE147;</i> <span>Añadir Nuevo Termino Clave</span>
+                        </a>
+                        <!-- Botón que abre el modal para añadir una nuevo termino clave -->
+ 
+                        <a href="#consultarTermino_claveModal" class="btn btn-success" data-bs-toggle="modal" @onclick="PrepareForConsulta">
+                            <i class="material-icons">&#xE8B6;</i> <span>Consultar Terminos Clave</span>
+                        </a>
+                        <!-- Botón que abre el modal para consultar un termino clave existente -->
+                    </div>
+                </div>
+            </div>
+            @if (Termino_claves == null)
+            {
+                <p>Cargando...</p>
+                <!-- Muestra un mensaje mientras se cargan los datos -->
+            }
+            else if (!Termino_claves.Any())
+            {
+                <p>No hay Terminos claves registrados.</p>
+                <!-- Muestra un mensaje si no hay terminos claves en la lista -->
+            }
+            else
+            {
+                <!-- Muestra la tabla con la lista de terminos clave si la lista contiene datos -->
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            
+                            <th>Termino</th>
+                            <th>Termino en Ingles</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var Termino_clave in Termino_claves)
+                        {
+                            <tr>
+                                
+                                <td>@Termino_clave["termino"]</td>
+                                <!-- Muestra el termino clave -->
+                                <td>@Termino_clave["termino_ingles"]</td>
+                                <!-- Muestra el termino de ingles clave-->
+                                <td>
+                                    <a href="#editTermino_claveModal" class="edit" data-bs-toggle="modal" @onclick="() => PrepareForAddOrEdit(Termino_clave)">
+                                        <i class="material-icons" data-bs-toggle="tooltip" title="Editar">&#xE254;</i>
+                                    </a>
+                                    <!-- Botón para editar terminos claves -->
+ 
+                                    <a href="#deleteTermino_claveModal" class="delete" data-bs-toggle="modal" @onclick="() => SetTermino_claveToDelete(Termino_clave)">
+                                        <i class="material-icons" data-bs-toggle="tooltip" title="Eliminar">&#xE872;</i>
+                                    </a>
+                                    <!-- Botón para eliminar terminos claves-->
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    </div>
+</div>
+ 
+<!-- Modal para Añadir/Editar terminos claves -->
+<div class="modal fade" id="addTermino_claveModal" tabindex="-1" role="dialog" aria-labelledby="addTermino_claveModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <EditForm Model="@currentTermino_clave" OnValidSubmit="SaveTermino_clave">
+                <DataAnnotationsValidator />
+                <!-- Valida los campos del formulario usando anotaciones de datos en C# -->
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addPTermino_claveModalLabel">@(isNewTermino_clave ? "Añadir" : "Editar") Termino Clave</h5>
+                    <!-- El título del modal cambia según si se está añadiendo o editando un termino clave -->
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Campos del formulario para ingresar los datos de terminos claves -->
+                    
+                    <div class="form-group">
+                        <label>Termino</label>
+                        <InputText class="form-control" @bind-Value="termino" />
+                        <ValidationMessage For="@(() => termino)" />
+                        <!-- Campo para ingresar el termino clave -->
+                    </div>
+                    <div class="form-group">
+                        <label>Termino en Ingles</label>
+                        <InputText class="form-control" @bind-Value="termino_ingles" />
+                        <ValidationMessage For="@(() => termino_ingles)" />
+                        <!-- Campo para ingresar el termino clave en ingles-->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">@(isNewTermino_clave ? "Añadir" : "Guardar")</button>
+                    <!-- Botón de acción que cambia según si se está añadiendo o guardando -->
+                </div>
+            </EditForm>
+        </div>
+    </div>
+</div>
+ 
+<!-- Modal para Eliminar terminos claves -->
+<div class="modal fade" id="deleteTermino_claveModal" tabindex="-1" role="dialog" aria-labelledby="deleteTermino_claveModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteTermino_claveModalLabel">Eliminar Termino Clave</h5>
+                <!-- Título del modal para eliminar un termino clave-->
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>¿Está seguro de que desea eliminar este termino clave?</p>
+                <p class="text-warning"><small>Esta acción no se puede deshacer.</small></p>
+                <!-- Mensaje de advertencia para la eliminación -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" @onclick="DeleteTermino_clave">Eliminar</button>
+                <!-- Botón para confirmar la eliminación del termino clave -->
+            </div>
+        </div>
+    </div>
+</div>
+ 
+<!-- Modal para Consultar termino clave -->
+<div class="modal fade" id="consultarTermino_claveModal" tabindex="-1" role="dialog" aria-labelledby="consultarTermino_claveModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="consultarTermino_claveModalLabel">Consultar terminos claves</h5>
+                <!-- Título del modal para consultar un termino clave -->
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Campos para ingresar el código y mostrar la información del termino clave consultado-->
+                
+                <div class="form-group">
+                    <label>termino</label>
+                    <input type="text" class="form-control" @bind="consultaTermino"  />
+                    <!-- Campo para mostrar el termino clave consultado, es de solo lectura -->
+                </div>
+                <div class="form-group">
+                    <label>Termino en Ingles</label>
+                    <input type="text" class="form-control" @bind="consultaTermino_ingles" readonly />
+                    <!-- Campo para mostrar el el termino clave en ingles consultado, es de solo lectura -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" @onclick="ConsultarTermino_clave">Consultar</button>
+                <!-- Botón para realizar la consulta del termino clave con el código ingresado -->
+                <button type="button" class="btn btn-warning" @onclick="ModificarTermino_claveConsultado" disabled="@(!Termino_claveEncontrado)">Modificar</button>
+                <!-- Botón para modificar el termino clave consultado si fue encontrada -->
+                <button type="button" class="btn btn-danger" @onclick="EliminarTermino_claveConsultado" disabled="@(!Termino_claveEncontrado)">Eliminar</button>
+                <!-- Botón para eliminarel termino clave consultado si fue encontrada -->
+            </div>
+        </div>
+    </div>
+</div>
+ 
+@code {
+   
+    private List<Dictionary<string, object>>Termino_claves = new List<Dictionary<string, object>>();
+    // Lista que almacena los terminos claves obtenidas desde la API
+   
+    private Dictionary<string, object> currentTermino_clave = new Dictionary<string, object>();
+    // Diccionario que representa el termino clave actual que se está añadiendo o editando
+ 
+    private bool isNewTermino_clave = true;
+    // Bandera que indica si se está añadiendo un nuevo termino clave o editando uno existente
+ 
+    private bool Termino_claveEncontrado = false;
+    // Bandera que indica si un termino clave fue encontrado durante la consulta
+ 
+  
+ 
+    private string termino = "";
+    // Variable que almacena el termidno de termino clave durante la edición o creación
+ 
+    private string termino_ingles = "";
+    // Variable que almacena el termino en ingles de termino clave durante la edición o creación
+ 
+
+ 
+    private string consultaTermino = "";
+    // Variable que almacena el termino del termino clave que se encontró durante la consulta
+  
+  
+    private string consultaTermino_ingles = "";
+    // Variable que almacena el termino en ingles del termimo clave que se encontró durante la consulta
+ 
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadTermino_claves();
+        // Método que se ejecuta al inicializar el componente. Carga la lista de terminos claves desde la API.
+    }
+ 
+    private async Task LoadTermino_claves()
+    {
+        try
+        {
+            Termino_claves = await ApiService.GetDataAsync("api/proyecto/termino_clave");
+            // Llama a la API para obtener la lista de terminos clave y la almacena en la variable 'terminosclaves'.
+            StateHasChanged();
+            // Fuerza la actualización de la UI después de cargar los datos.
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al cargar terminos claves: {ex.Message}");
+            // Muestra un error en la consola si la carga de terminos claves falla.
+            await JSRuntime.InvokeVoidAsync("alert", "Error al cargar terminos claves. Por favor, intente nuevamente.");
+            // Muestra una alerta en la página indicando que hubo un error al cargar los terminos claves.
+        }
+    }
+ 
+    private void PrepareForAddOrEdit(Dictionary<string, object>? Termino_clave = null)
+    {
+        isNewTermino_clave = Termino_clave == null;
+        // Si 'Termino_clave' es null, significa que estamos añadiendo una nueva Termino_clave. De lo contrario, estamos editando.
+        currentTermino_clave = Termino_clave ?? new Dictionary<string, object>();
+        // Si 'Termino_clave' es null, inicializamos un nuevo diccionario. De lo contrario, usamos el diccionario de la Termino_clave seleccionada.
+ 
+       
+        termino = currentTermino_clave.TryGetValue("termino", out var t) ? t?.ToString() ?? "" : "";
+        termino_ingles = currentTermino_clave.TryGetValue("termino_ingles", out var ti) ? ti?.ToString() ?? "" : "";
+        // Extrae los valores de 'codigo', 'termino' y 'termino en ingles' de Termino_clave' y los asigna a las variables correspondientes.
+ 
+        JSRuntime.InvokeVoidAsync("showModal", "addTermino_claveModal");
+        // Muestra el modal para añadir o editar Termino_clave usando JavaScript.
+    }
+ 
+    private void PrepareForConsulta()
+    {
+        
+        consultaTermino = "";
+        consultaTermino_ingles = "";
+        Termino_claveEncontrado = false;
+        // Limpia los campos de consulta y establece 'Termino_claveEncontrado' en false.
+    }
+ 
+    private void SetTermino_claveToDelete(Dictionary<string, object> Termino_clave)
+    {
+        currentTermino_clave = Termino_clave;
+        // Establece la Termino_clave actual como la Termino_clave a eliminar.
+        JSRuntime.InvokeVoidAsync("showModal", "deleteTermino_claveModal");
+        // Muestra el modal para confirmar la eliminación usando JavaScript.
+ 
+ 
+    }
+      private async Task SaveTermino_clave()
+    {
+        try
+        {
+           
+            currentTermino_clave["termino"] = termino;
+            currentTermino_clave["termino_ingles"] = termino_ingles;
+            // Actualiza 'currentTermino_clave' con los valores actuales de los campos de entrada.
+ 
+            bool success;
+            if (isNewTermino_clave)
+            {
+                success = await ApiService.AddEntityAsync("api/proyecto/termino_clave", currentTermino_clave);
+                await LoadTermino_claves();
+               
+                // Si estamos añadiendo una nueva Termino_clave, llama a la API para añadir la nueva Termino_clave.
+            }
+            else
+            {
+                success = await ApiService.EditEntityAsync("api/proyecto/termino_clave/termino", termino, currentTermino_clave);
+                await LoadTermino_claves();
+                // Si estamos editando una Termino_clave existente, llama a la API para editarla.
+            }
+ 
+            if (success)
+            {
+ 
+                await JSRuntime.InvokeVoidAsync("hideModal", "addTermino_claveModal");
+                // Si la operación tiene éxito, cierra el modal.
+ 
+                await LoadTermino_claves();
+                // Recarga la lista de terminos claves para reflejar los cambios.
+ 
+                termino = termino_ingles = string.Empty;
+                currentTermino_clave = new Dictionary<string, object>();
+                isNewTermino_clave = true;
+                // Limpia los campos del formulario y restablece el estado.
+ 
+                StateHasChanged();
+               
+                // Fuerza la actualización de la UI.
+               
+               await LoadTermino_claves();
+ 
+                await JSRuntime.InvokeVoidAsync("alert", "Operación realizada con éxito1.");
+               
+               
+                // Muestra un mensaje de éxito al usuario.
+            }
+            else
+            {
+                await JSRuntime.InvokeVoidAsync("alert", "Error al guardar el termino clave. Por favor, intente nuevamente.");
+                // Si la operación falla, muestra un mensaje de error.
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al guardar el termino clave: {ex.Message}");
+            await JSRuntime.InvokeVoidAsync("alert", "Error al guardar el termino clave. Por favor, intente nuevamente.");
+            // Muestra un error en la consola y una alerta si hay una excepción durante el guardado.
+        }
+    }
+ 
+    private async Task DeleteTermino_clave()
+    {
+        try
+        {
+            if (currentTermino_clave.TryGetValue("termino", out var codigoObj) && codigoObj is string codigoStr)
+            {
+               
+                bool success = await ApiService.DeleteEntityAsync("api/proyecto/termino_clave/termino", codigoStr);
+                // Si se encuentra el código del termino clave actual, llama a la API para eliminarla.
+                if (success)
+                {
+                    await JSRuntime.InvokeVoidAsync("hideModal", "deleteTermino_claveModal");
+                    await LoadTermino_claves();
+                    await JSRuntime.InvokeVoidAsync("alert", "Termino clave eliminado con éxito.");
+                    // Si la operación tiene éxito, cierra el modal, recarga la lista de terminos claves y muestra un mensaje de éxito.
+                }
+                else
+                {
+                   
+                    await JSRuntime.InvokeVoidAsync("alert", "Error al eliminar Termino clave. Por favor, intente nuevamente.");
+                    // Si la operación falla, muestra un mensaje de error.
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al eliminar Termino clave: {ex.Message}");
+            await JSRuntime.InvokeVoidAsync("alert", "Error al eliminar Termino clave. Por favor, intente nuevamente.");
+            // Muestra un error en la consola y una alerta si hay una excepción durante la eliminación.
+        }
+    }
+ 
+    private async Task ConsultarTermino_clave()
+    {
+        try
+        {
+            var resultado = await ApiService.GetDataAsync($"api/proyecto/termino_clave/termino/{consultaTermino}");
+            if (resultado.Any())
+            {
+                var Termino_claveConsultado = resultado.First();
+                
+                consultaTermino = Termino_claveConsultado["termino"]?.ToString() ?? "";
+                consultaTermino_ingles = Termino_claveConsultado["termino_ingles"]?.ToString() ?? "";
+                Termino_claveEncontrado = true;
+                // Si se encuentra un termino clave con el código consultado, muestra los datos en los campos correspondientes.
+            }
+            else
+            {
+                
+                consultaTermino_ingles = "";
+                Termino_claveEncontrado = false;
+                await JSRuntime.InvokeVoidAsync("alert", "No se encontró ningun Termino clave con ese código.");
+                // Si no se encuentra ninguna Termino_clave, limpia los campos y muestra un mensaje de alerta.
+            }
+            StateHasChanged();
+            // Fuerza la actualización de la UI para reflejar los cambios.
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al consultar Termino clave: {ex.Message}");
+            await JSRuntime.InvokeVoidAsync("alert", "Error al consultar lel Termino_clave. Por favor, intente nuevamente.");
+            // Muestra un error en la consola y una alerta si hay una excepción durante la consulta.
+        }
+    }
+ 
+    private async Task ModificarTermino_claveConsultado()
+    {
+        PrepareForAddOrEdit(new Dictionary<string, object>
+        {
+           
+            ["termino"] = consultaTermino,
+            ["termino_ingles"] = consultaTermino_ingles
+        });
+        await JSRuntime.InvokeVoidAsync("hideModal", "consultarTermino_claveModal");
+        // Prepara los datos consultados para la edición y cierra el modal de consulta.
+    }
+ 
+    private async Task EliminarTermino_claveConsultado()
+    {
+        SetTermino_claveToDelete(new Dictionary<string, object>
+        {
+            
+            ["termino"] = consultaTermino,
+            ["termino_ingles"] = consultaTermino_ingles
+        });
+        await JSRuntime.InvokeVoidAsync("hideModal", "consultarTermino_claveModal");
+        // Prepara los datos consultados para la eliminación y cierra el modal de consulta.
+    }
+   
+}
+ 

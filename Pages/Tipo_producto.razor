@@ -1,0 +1,497 @@
+@page "/tipo_producto"
+<!--
+Define la URL relativa que carga este componente. En este caso, cuando un usuario navega a "/tipo_producto",
+este componente Blazor se carga y se representa en la página.
+-->
+@using BlazorFrontEnd.Services
+<!--
+// Importa el espacio de nombres BlazorFrontEnd.Services para que puedas utilizar los servicios dentro de este componente.
+-->
+@inject ApiService ApiService
+<!--
+// Inyecta una instancia del servicio ApiService. Esto permite que el componente llame a la API a través de este servicio.
+-->
+@inject IJSRuntime JSRuntime
+<!--
+// Inyecta IJSRuntime, que es un servicio Blazor para ejecutar JavaScript desde C#.
+-->
+
+
+
+<div class="container-xl">
+    <div class="table-responsive">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h2>Gestionar <b>Tipo de productos</b></h2>
+                        <!-- Título de la tabla que indica que se trata de la gestión de productos -->
+                    </div>
+                    <div class="col-sm-6">
+                        <a href="#addTipo_productoModal" class="btn btn-success" data-bs-toggle="modal" @onclick="() => PrepareForAddOrEdit()">
+                            <i class="material-icons">&#xE147;</i> <span>Añadir Nuevo Tipo de producto</span>
+                        </a>
+                        <!-- Botón que abre el modal para añadir un nuevo tipo de producto -->
+ 
+                        <a href="#consultarTipo_productoModal" class="btn btn-success" data-bs-toggle="modal" @onclick="PrepareForConsulta">
+                            <i class="material-icons">&#xE8B6;</i> <span>Consultar Tipo de producto</span>
+                        </a>
+                        <!-- Botón que abre el modal para consultar un tipo de producto existente -->
+                    </div>
+                </div>
+            </div>
+            @if (Tipo_productos == null)
+            {
+                <p>Cargando...</p>
+                <!-- Muestra un mensaje mientras se cargan los datos -->
+            }
+            else if (!Tipo_productos.Any())
+            {
+                <p>No hay tipos de productos registradao.</p>
+                <!-- Muestra un mensaje si no hay tipos de productos en la lista -->
+            }
+            else
+            {
+                <!-- Muestra la tabla con la lista de tipo de productos si la lista contiene datos -->
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Categoria</th>
+                            <th>Clase</th>
+                            <th>Nombre</th>
+                            <th>Tipologia</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var Tipo_producto in Tipo_productos)
+                        {
+                            <tr>
+                                <td>@Tipo_producto["id"]</td>
+                                <!-- Muestra el código del tipo de producto-->
+                                <td>@Tipo_producto["categoria"]</td>
+                                <!-- Muestra la categoria del tipo de producto -->
+                                <td>@Tipo_producto["clase"]</td>
+                                <!-- Muestra la clase del tipo de producto -->
+                                <td>@Tipo_producto["nombre"]</td>
+                                <!-- Muestra el nombre del tipo de producto -->
+                                <td>@Tipo_producto["tipologia"]</td>
+                                <!-- Muestra la tipologia del tipo de producto -->
+                                <td>
+                                    <a href="#editTipo_productoModal" class="edit" data-bs-toggle="modal" @onclick="() => PrepareForAddOrEdit(Tipo_producto)">
+                                        <i class="material-icons" data-bs-toggle="tooltip" title="Editar">&#xE254;</i>
+                                    </a>
+                                    <!-- Botón para editar el tipo de producto-->
+ 
+                                    <a href="#deleteTipo_productoModal" class="delete" data-bs-toggle="modal" @onclick="() => SetTipo_productoToDelete(Tipo_producto)">
+                                        <i class="material-icons" data-bs-toggle="tooltip" title="Eliminar">&#xE872;</i>
+                                    </a>
+                                    <!-- Botón para eliminar el tipo del producto-->
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    </div>
+</div>
+ 
+<!-- Modal para Añadir/Editar tipo de producto -->
+<div class="modal fade" id="addTipo_productoModal" tabindex="-1" role="dialog" aria-labelledby="addTipo_productoModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <EditForm Model="@currentTipo_producto" OnValidSubmit="SaveTipo_producto">
+                <DataAnnotationsValidator />
+                <!-- Valida los campos del formulario usando anotaciones de datos en C# -->
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addTipo_productoLabel">@(isNewTipo_producto ? "Añadir" : "Editar") Tipo de producto</h5>
+                    <!-- El título del modal cambia según si se está añadiendo o editando un tipo de producto -->
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Campos del formulario para ingresar los datos del tipo de producto -->
+                    <div class="form-group">
+                        <label>Id</label>
+                        <InputText class="form-control" @bind-Value="id" />
+                        <ValidationMessage For="@(() => id)" />
+                        <!-- Campo para ingresar el código del tipo de producto -->
+                    </div>
+                    <div class="form-group">
+                        <label>Categoria</label>
+                        <InputText class="form-control" @bind-Value="categoria" />
+                        <ValidationMessage For="@(() => categoria)" />
+                        <!-- Campo para ingresar la categoria del tipo de producto -->
+                    </div>
+                    <div class="form-group">
+                        <label>Clase</label>
+                        <InputText class="form-control" @bind-Value="clase"   />
+                        <ValidationMessage For="@(() => clase)" />
+                       
+                        <!-- Campo para ingresar la clase de tipo de producto-->
+                    </div>
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <InputText class="form-control" @bind-Value="nombre" />
+                        <ValidationMessage For="@(() => nombre)" />
+                        <!-- Campo para ingresar el nombre del tipo de producto -->
+                    </div>
+                    <div class="form-group">
+                        <label>Tipologia</label>
+                        <InputText class="form-control" @bind-Value="tipologia" />
+                        <ValidationMessage For="@(() => tipologia)" />
+                        <!-- Campo para ingresar la tipologia del tipo de producto -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">@(isNewTipo_producto ? "Añadir" : "Guardar")</button>
+                    <!-- Botón de acción que cambia según si se está añadiendo o guardando -->
+                </div>
+            </EditForm>
+        </div>
+    </div>
+</div>
+ 
+<!-- Modal para Eliminar tipo de producto -->
+<div class="modal fade" id="deleteTipo_productoModal" tabindex="-1" role="dialog" aria-labelledby="deleteTipo_productoModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteTipo_productoModalLabel">Eliminar Tipo de producto</h5>
+                <!-- Título del modal para eliminar un tipo de producto -->
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>¿Está seguro de que desea eliminar este tipo de producto?</p>
+                <p class="text-warning"><small>Esta acción no se puede deshacer.</small></p>
+                <!-- Mensaje de advertencia para la eliminación -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" @onclick="DeleteTipo_producto">Eliminar</button>
+                <!-- Botón para confirmar la eliminación del tipo de producto -->
+            </div>
+        </div>
+    </div>
+</div>
+ 
+<!-- Modal para Consultar tipo de producto -->
+<div class="modal fade" id="consultarTipo_productoModal" tabindex="-1" role="dialog" aria-labelledby="consultarTipo_productoModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="consultarTipo_productoModalLabel">Consultar Tipo de producto</h5>
+                <!-- Título del modal para consultar un tipo de producto -->
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Campos para ingresar el código y mostrar la información del tipo de producto consultado -->
+                <div class="form-group">
+                    <label>Código</label>
+                    <input type="text" class="form-control" @bind="consultaId" @bind:event="oninput" />
+                    <!-- Campo para ingresar el código del tipo de producto a consultar -->
+                </div>
+                <div class="form-group">
+                    <label>Categoria</label>
+                    <input type="text" class="form-control" @bind="consultaCategoria" readonly />
+                    <!-- Campo para mostrar la categoria del tipo de producto consultado, es de solo lectura -->
+                </div>
+                <div class="form-group">
+                    <label>Clase</label>
+                    <input type="text" class="form-control" @bind="consultaClase" readonly />
+                    <!-- Campo para mostrar la clase de tipo de producto consultado, es de solo lectura -->
+                </div>
+                <div class="form-group">
+                    <label>Nombre</label>
+                    <input type="text" class="form-control" @bind="consultaNombre" readonly />
+                    <!-- Campo para mostrar el nombre del tipo de producto consultado, es de solo lectura -->
+                </div>
+                <div class="form-group">
+                    <label>Tipologia</label>
+                    <input type="text" class="form-control" @bind="consultaTipologia" readonly />
+                    <!-- Campo para mostrar la tipologia del tipo_producto consultado, es de solo lectura -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" @onclick="ConsultarTipo_producto">Consultar</button>
+                <!-- Botón para realizar la consulta del tipo de producto con el código ingresado -->
+                <button type="button" class="btn btn-warning" @onclick="ModificarTipo_productoConsultado" disabled="@(!Tipo_productoEncontrado)">Modificar</button>
+                <!-- Botón para modificar el Tipo de producto consultado si fue encontrada -->
+                <button type="button" class="btn btn-danger" @onclick="EliminarTipo_productoConsultado" disabled="@(!Tipo_productoEncontrado)">Eliminar</button>
+                <!-- Botón para eliminar el Tipo_producto consultado si fue encontrada -->
+            </div>
+        </div>
+    </div>
+</div>
+ 
+@code {
+   
+    private List<Dictionary<string, object>> Tipo_productos = new List<Dictionary<string, object>>();
+    // Lista que almacena los tipos de productos obtenidas desde la API
+   
+    private Dictionary<string, object> currentTipo_producto = new Dictionary<string, object>();
+    // Diccionario que representa el tipo de producto actual que se está añadiendo o editando
+ 
+    private bool isNewTipo_producto = true;
+    // Bandera que indica si se está añadiendo un nuevo tip de producto o editando uno existente
+ 
+    private bool Tipo_productoEncontrado = false;
+    // Bandera que indica si un tipo de producto fue encontrado durante la consulta
+ 
+    private string id = "";
+    // Variable que almacena el código del tipo de producto durante la edición o creación
+ 
+    private string categoria = "";
+    // Variable que almacena la categoria del tipo de producto durante la edición o creación
+ 
+    private string clase = "";
+    // Variable que almacena la clase del tipo de producto durante la edición o creación
+ 
+    private string nombre = "";
+    // Variable que almacena el nombre del tipo de producto durante la edición o creación
+
+    private string tipologia = "";
+    // Variable que almacena la tipologia del tipo de producto durante la edición o creación
+ 
+    private string consultaId = "";
+    // Variable que almacena el id del tipo de producto que se va a consultar
+ 
+    private string consultaCategoria = "";
+    // Variable que almacena la categoria del tipo de producto que se encontró durante la consulta
+ 
+    private string consultaClase = "";
+    // Variable que almacena la clase del tipo de producto que se encontró durante la consulta
+ 
+    private string consultaNombre = "";
+    // Variable que almacena el nombre del tipo de producto que se encontró durante la consulta
+    private string consultaTipologia = "";
+    // Variable que almacena la tipologia del tipo de producto que se encontró durante la consulta
+ 
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadTipo_productos();
+        // Método que se ejecuta al inicializar el componente. Carga la lista del tipo de productos desde la API.
+    }
+ 
+    private async Task LoadTipo_productos()
+    {
+        try
+        {
+            Tipo_productos = await ApiService.GetDataAsync("api/proyecto/Tipo_producto");
+            // Llama a la API para obtener la lista de tipos de producto y la almacena en la variable 'Tipo_productos'.
+            StateHasChanged();
+            // Fuerza la actualización de la UI después de cargar los datos.
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al cargar Tipo_productos: {ex.Message}");
+            // Muestra un error en la consola si la carga de tipo de productos falla.
+            await JSRuntime.InvokeVoidAsync("alert", "Error al cargar Tipo_productos. Por favor, intente nuevamente.");
+            // Muestra una alerta en la página indicando que hubo un error al cargar los Tipo productos
+        }
+    }
+ 
+    private void PrepareForAddOrEdit(Dictionary<string, object>? Tipo_producto = null)
+    {
+        isNewTipo_producto = Tipo_producto == null;
+        // Si 'Tipo_producto' es null, significa que estamos añadiendo un nuevo tipo de producto. De lo contrario, estamos editando.
+        currentTipo_producto = Tipo_producto ?? new Dictionary<string, object>();
+        // Si 'Tipo_producto' es null, inicializamos un nuevo diccionario. De lo contrario, usamos el diccionario de la Tipo producto seleccionada.
+ 
+        id = currentTipo_producto.TryGetValue("id", out var i) ? i?.ToString() ?? "" : "";
+        categoria = currentTipo_producto.TryGetValue("categoria", out var ca) ? ca.ToString() ?? "" : "";
+        clase = currentTipo_producto.TryGetValue("clase", out var cl) ? cl?.ToString() ?? "" : "";
+        nombre = currentTipo_producto.TryGetValue("nombre", out var n) ? n?.ToString() ?? "" : "";
+        tipologia = currentTipo_producto.TryGetValue("tipologia", out var t) ? t?.ToString() ?? "" : "";
+        // Extrae los valores de 'id', 'categoria', 'clase' ,'nombre' y 'tiplogia'  de 'Tipo_producto' y los asigna a las variables correspondientes.
+ 
+        JSRuntime.InvokeVoidAsync("showModal", "addTipo_productoModal");
+        // Muestra el modal para añadir o editar tipo de producto usando JavaScript.
+    }
+ 
+    private void PrepareForConsulta()
+    {
+        consultaId = "";
+        consultaCategoria = "";
+        consultaClase = "";
+        consultaNombre = "";
+        consultaTipologia = "";
+        Tipo_productoEncontrado = false;
+        // Limpia los campos de consulta y establece 'Tipo_producto' en false.
+    }
+ 
+    private void SetTipo_productoToDelete(Dictionary<string, object> Tipo_producto)
+    {
+        currentTipo_producto = Tipo_producto;
+        // Establece el tipo de producto actual como el tipo de producto a eliminar.
+        JSRuntime.InvokeVoidAsync("showModal", "deleteTipo_productoModal");
+        // Muestra el modal para confirmar la eliminación usando JavaScript.
+ 
+ 
+    }
+ 
+    private async Task SaveTipo_producto()
+    {
+        try
+        {
+            currentTipo_producto["id"] = id;
+            currentTipo_producto["categoria"] = categoria;
+            currentTipo_producto["clase"] = clase;
+            currentTipo_producto["nombre"] = nombre;
+            currentTipo_producto["tipologia"] = tipologia;
+            // Actualiza 'currentTipo_producto' con los valores actuales de los campos de entrada.
+ 
+            bool success;
+            if (isNewTipo_producto)
+            {
+                success = await ApiService.AddEntityAsync("api/proyecto/tipo_producto", currentTipo_producto);
+                await LoadTipo_productos();
+               
+                // Si estamos añadiendo un nuevo tipo de producto, llama a la API para añadir el nuevo tipo de producto.
+            }
+            else
+            {
+                success = await ApiService.EditEntityAsync("api/proyecto/tipo_producto/id", id, currentTipo_producto);
+                await LoadTipo_productos();
+                // Si estamos editando un Tipo producto existente, llama a la API para editarla.
+            }
+ 
+            if (success)
+            {
+ 
+                await JSRuntime.InvokeVoidAsync("hideModal", "addTipo_productoModal");
+                // Si la operación tiene éxito, cierra el modal.
+ 
+                await LoadTipo_productos();
+                // Recarga la lista de Tipo de productos para reflejar los cambios.
+ 
+                id = categoria = clase = nombre = tipologia = string.Empty;
+                currentTipo_producto = new Dictionary<string, object>();
+                isNewTipo_producto = true;
+                // Limpia los campos del formulario y restablece el estado.
+ 
+                StateHasChanged();
+               
+                // Fuerza la actualización de la UI.
+               
+               await LoadTipo_productos();
+ 
+                await JSRuntime.InvokeVoidAsync("alert", "Operación realizada con éxito1.");
+               
+               
+                // Muestra un mensaje de éxito al usuario.
+            }
+            else
+            {
+                await JSRuntime.InvokeVoidAsync("alert", "Error al guardar el Tipo de producto. Por favor, intente nuevamente.");
+                // Si la operación falla, muestra un mensaje de error.o
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al guardar Tipo de producto: {ex.Message}");
+            await JSRuntime.InvokeVoidAsync("alert", "Error al guardar el Tipo de producto. Por favor, intente nuevamente.");
+            // Muestra un error en la consola y una alerta si hay una excepción durante el guardado.
+        }
+    }
+ 
+    private async Task DeleteTipo_producto()
+    {
+        try
+        {
+            if (currentTipo_producto.TryGetValue("id", out var codigoObj) && codigoObj is string codigoStr)
+            {
+               
+                bool success = await ApiService.DeleteEntityAsync("api/proyecto/tipo_producto/id", codigoStr);
+                // Si se encuentra el código de el  Tipo de producto actual, llama a la API para eliminarla.
+                if (success)
+                {
+                    await JSRuntime.InvokeVoidAsync("hideModal", "deleteTipo_productoModal");
+                    await LoadTipo_productos();
+                    await JSRuntime.InvokeVoidAsync("alert", "Tipo de producto eliminado con éxito.");
+                    // Si la operación tiene éxito, cierra el modal, recarga la lista de Tipo de producto y muestra un mensaje de éxito.
+                }
+                else
+                {
+                   
+                    await JSRuntime.InvokeVoidAsync("alert", "Error al eliminar el tipo de producto. Por favor, intente nuevamente.");
+                    // Si la operación falla, muestra un mensaje de error.
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al eliminar tipo de producto: {ex.Message}");
+            await JSRuntime.InvokeVoidAsync("alert", "Error al eliminar el tipo de de producto. Por favor, intente nuevamente.");
+            // Muestra un error en la consola y una alerta si hay una excepción durante la eliminación.
+        }
+    }
+ 
+    private async Task ConsultarTipo_producto()
+    {
+        try
+        {
+            var resultado = await ApiService.GetDataAsync($"api/proyecto/tipo_producto/id/{consultaId}");
+            if (resultado.Any())
+            {
+                var Tipo_productoConsultado = resultado.First();
+                consultaCategoria = Tipo_productoConsultado["categoria"]?.ToString() ?? "";
+                consultaClase = Tipo_productoConsultado["clase"]?.ToString() ?? "";
+                consultaNombre = Tipo_productoConsultado["nombre"]?.ToString() ?? "";
+                consultaTipologia = Tipo_productoConsultado["tipologia"]?.ToString() ?? "";
+                Tipo_productoEncontrado = true;
+                // Si se encuentra un tipo de prodcuto con el código consultado, muestra los datos en los campos correspondientes.
+            }
+            else
+            {
+                consultaCategoria = "";
+                consultaClase = "";
+                consultaNombre = "";
+                consultaTipologia = "";
+                Tipo_productoEncontrado = false;
+                await JSRuntime.InvokeVoidAsync("alert", "No se encontró ninguna Tipo de producto con ese código.");
+                // Si no se encuentra ningun Tipo de producto, limpia los campos y muestra un mensaje de alerta.
+            }
+            StateHasChanged();
+            // Fuerza la actualización de la UI para reflejar los cambios.
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al consultar tipo de producto: {ex.Message}");
+            await JSRuntime.InvokeVoidAsync("alert", "Error al consultar el tipo de prodcuto. Por favor, intente nuevamente.");
+            // Muestra un error en la consola y una alerta si hay una excepción durante la consulta.
+        }
+    }
+ 
+    private async Task ModificarTipo_productoConsultado()
+    {
+        PrepareForAddOrEdit(new Dictionary<string, object>
+        {
+            ["id"] = consultaId,
+            ["categoria"] = consultaCategoria,
+            ["clase"] = consultaClase,
+            ["nombre"] = consultaNombre,
+            ["tipologia"] = consultaTipologia
+        });
+        await JSRuntime.InvokeVoidAsync("hideModal", "consultarTipo_productoModal");
+        // Prepara los datos consultados para la edición y cierra el modal de consulta.
+    }
+ 
+    private async Task EliminarTipo_productoConsultado()
+    {
+        SetTipo_productoToDelete(new Dictionary<string, object>
+        {
+            ["id"] = consultaId,
+            ["categoria"] = consultaCategoria,
+            ["clase"] = consultaClase,
+            ["nombre"] = consultaNombre,
+            ["tipologia"] = consultaTipologia
+        });
+        await JSRuntime.InvokeVoidAsync("hideModal", "consultarTipo_productoModal");
+        // Prepara los datos consultados para la eliminación y cierra el modal de consulta.
+    }
+   
+}
+ 
