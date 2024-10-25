@@ -1,0 +1,280 @@
+@page "/linea_investigacion"
+@using BlazorFrontEnd.Services
+@inject ApiService ApiService
+@inject IJSRuntime JSRuntime
+
+<div class="container-xl">
+    <div class="table-responsive">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h2>Gestionar <b>Líneas de Investigación</b></h2>
+                    </div>
+                    <div class="col-sm-6">
+                        <a href="#addLineaInvestigacionModal" class="btn btn-success" data-bs-toggle="modal" @onclick="() => PrepareForAddOrEdit()">
+                            <i class="material-icons">&#xE147;</i> <span>Añadir Nueva Línea de Investigación</span>
+                        </a>
+                        <a href="#consultarLineaInvestigacionModal" class="btn btn-success" data-bs-toggle="modal" @onclick="PrepareForConsulta">
+                            <i class="material-icons">&#xE8B6;</i> <span>Consultar Línea de Investigación</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            @if (lineasInvestigacion == null)
+            {
+            <p>Cargando...</p>
+            }
+            else if (!lineasInvestigacion.Any())
+            {
+            <p>No hay líneas de investigación registradas.</p>
+            }
+            else
+            {
+            <table class="table table-striped table-hover">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var linea in lineasInvestigacion)
+                {
+                <tr>
+                    <td>@linea["id"]</td>
+                    <td>@linea["nombre"]</td>
+                    <td>@linea["descripcion"]</td>
+                    <td>
+                        <a href="#editLineaInvestigacionModal" class="edit" data-bs-toggle="modal" @onclick="() => PrepareForAddOrEdit(linea)">
+                            <i class="material-icons" data-bs-toggle="tooltip" title="Editar">&#xE254;</i>
+                        </a>
+                        <a href="#deleteLineaInvestigacionModal" class="delete" data-bs-toggle="modal" @onclick="() => SetLineaInvestigacionToDelete(linea)">
+                            <i class="material-icons" data-bs-toggle="tooltip" title="Eliminar">&#xE872;</i>
+                        </a>
+                    </td>
+                </tr>
+                }
+                </tbody>
+            </table>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Añadir/Editar línea de investigación -->
+<div class="modal fade" id="addLineaInvestigacionModal" tabindex="-1" role="dialog" aria-labelledby="addLineaInvestigacionModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <EditForm Model="@currentLineaInvestigacion" OnValidSubmit="SaveLineaInvestigacion">
+                <DataAnnotationsValidator />
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addLineaInvestigacionModalLabel">@(isNewLineaInvestigacion ? "Añadir" : "Editar") Línea de Investigación</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <InputText class="form-control" @bind-Value="nombre" />
+                        <ValidationMessage For="@(() => nombre)" />
+                    </div>
+                    <div class="form-group">
+                        <label>Descripción</label>
+                        <InputText class="form-control" @bind-Value="descripcion" />
+                        <ValidationMessage For="@(() => descripcion)" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">@(isNewLineaInvestigacion ? "Añadir" : "Guardar")</button>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Eliminar línea de investigación -->
+<div class="modal fade" id="deleteLineaInvestigacionModal" tabindex="-1" role="dialog" aria-labelledby="deleteLineaInvestigacionModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteLineaInvestigacionModalLabel">Eliminar Línea de Investigación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>¿Está seguro de que desea eliminar esta línea de investigación?</p>
+                <p class="text-warning"><small>Esta acción no se puede deshacer.</small></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" @onclick="DeleteLineaInvestigacion">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Consultar línea de investigación -->
+<div class="modal fade" id="consultarLineaInvestigacionModal" tabindex="-1" role="dialog" aria-labelledby="consultarLineaInvestigacionModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="consultarLineaInvestigacionModalLabel">Consultar Línea de Investigación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Nombre</label>
+                    <input type="text" class="form-control" @bind="consultaNombre" />
+                </div>
+                <div class="form-group">
+                    <label>Descripción</label>
+                    <input type="text" class="form-control" @bind="consultaDescripcion" readonly />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" @onclick="ConsultarLineaInvestigacion">Consultar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+private List<Dictionary<string, object>> lineasInvestigacion = new List<Dictionary<string, object>>();
+private Dictionary<string, object> currentLineaInvestigacion = new Dictionary<string, object>();
+private bool isNewLineaInvestigacion = true;
+
+private string nombre = "";
+private string descripcion = "";
+private string consultaNombre = "";
+private string consultaDescripcion = "";
+
+protected override async Task OnInitializedAsync()
+{
+await LoadLineasInvestigacion();
+}
+
+private async Task LoadLineasInvestigacion()
+{
+try
+{
+lineasInvestigacion = await ApiService.GetDataAsync("api/p/linea_investigacion");
+StateHasChanged();
+}
+catch (Exception ex)
+{
+Console.WriteLine($"Error al cargar líneas de investigación: {ex.Message}");
+await JSRuntime.InvokeVoidAsync("alert", "Error al cargar líneas de investigación. Por favor, intente nuevamente.");
+}
+}
+
+private void PrepareForAddOrEdit(Dictionary<string, object>? linea = null)
+{
+isNewLineaInvestigacion = linea == null;
+currentLineaInvestigacion = linea ?? new Dictionary<string, object>();
+
+nombre = currentLineaInvestigacion.TryGetValue("nombre", out var n) ? n?.ToString() ?? "" : "";
+descripcion = currentLineaInvestigacion.TryGetValue("descripcion", out var d) ? d?.ToString() ?? "" : "";
+
+JSRuntime.InvokeVoidAsync("showModal", "addLineaInvestigacionModal");
+}
+
+private void PrepareForConsulta()
+{
+consultaNombre = "";
+consultaDescripcion = "";
+}
+
+private async Task ConsultarLineaInvestigacion()
+{
+try
+{
+var resultado = await ApiService.GetDataAsync($"api/p/linea_investigacion/nombre/{consultaNombre}");
+if (resultado.Any())
+{
+var lineaConsultada = resultado.First();
+consultaDescripcion = lineaConsultada["descripcion"]?.ToString() ?? "";
+}
+else
+{
+consultaDescripcion = "";
+await JSRuntime.InvokeVoidAsync("alert", "No se encontró ninguna línea de investigación con ese nombre.");
+}
+StateHasChanged();
+}
+catch (Exception ex)
+{
+Console.WriteLine($"Error al consultar línea de investigación: {ex.Message}");
+await JSRuntime.InvokeVoidAsync("alert", "Error al consultar línea de investigación. Por favor, intente nuevamente.");
+}
+}
+
+private async Task SaveLineaInvestigacion()
+{
+try
+{
+currentLineaInvestigacion["nombre"] = nombre;
+currentLineaInvestigacion["descripcion"] = descripcion;
+
+bool success;
+if (isNewLineaInvestigacion)
+{
+success = await ApiService.AddEntityAsync("api/p/linea_investigacion", currentLineaInvestigacion);
+}
+else
+{
+success = await ApiService.EditEntityAsync("api/p/linea_investigacion/nombre", nombre, currentLineaInvestigacion);
+}
+
+if (success)
+{
+await JSRuntime.InvokeVoidAsync("hideModal", "addLineaInvestigacionModal");
+await LoadLineasInvestigacion();
+StateHasChanged();
+await JSRuntime.InvokeVoidAsync("alert", "Operación realizada con éxito.");
+}
+else
+{
+await JSRuntime.InvokeVoidAsync("alert", "Error al guardar la línea de investigación. Por favor, intente nuevamente.");
+}
+}
+catch (Exception ex)
+{
+Console.WriteLine($"Error al guardar línea de investigación: {ex.Message}");
+await JSRuntime.InvokeVoidAsync("alert", "Error al guardar línea de investigación. Por favor, intente nuevamente.");
+}
+}
+
+private void SetLineaInvestigacionToDelete(Dictionary<string, object> linea)
+{
+currentLineaInvestigacion = linea;
+JSRuntime.InvokeVoidAsync("showModal", "deleteLineaInvestigacionModal");
+}
+
+private async Task DeleteLineaInvestigacion()
+{
+try
+{
+if (currentLineaInvestigacion.TryGetValue("nombre", out var nombreObj) && nombreObj is string nombreStr)
+{
+bool success = await ApiService.DeleteEntityAsync("api/p/linea_investigacion/nombre", nombreStr);
+if (success)
+{
+await JSRuntime.InvokeVoidAsync("hideModal", "deleteLineaInvestigacionModal");
+await LoadLineasInvestigacion();
+await JSRuntime.InvokeVoidAsync("alert", "Línea de investigación eliminada con éxito.");
+}
+else
+{
+await JSRuntime.InvokeVoidAsync("alert", "Error al eliminar la línea de investigación. Por favor, intente nuevamente.");
+}
+}
+}
+catch (Exception ex)
+{
+Console.WriteLine($"Error al eliminar línea de investigación: {ex.Message}");
+await JSRuntime.InvokeVoidAsync("alert", "Error al eliminar línea de investigación. Por favor, intente nuevamente.");
+}
+}
+}

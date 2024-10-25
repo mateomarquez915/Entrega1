@@ -23,12 +23,14 @@
                         <!-- Título de la tabla que indica que se trata de la gestión de proyectos -->
                     </div>
                     <div class="col-sm-6">
-                        <a href="#addProyectoModal" class="btn btn-success" data-bs-toggle="modal" @onclick="() => PrepareForAddOrEdit()">
+                        <a href="#addProyectoModal" class="btn btn-success" data-bs-toggle="modal"
+                           @onclick="() => PrepareForAddOrEdit()">
                             <i class="material-icons">&#xE147;</i> <span>Añadir Nuevo Proyecto</span>
                         </a>
                         <!-- Botón que abre el modal para añadir un nuevo proyecto -->
- 
-                        <a href="#consultarProyectoModal" class="btn btn-success" data-bs-toggle="modal" @onclick="PrepareForConsulta">
+
+                        <a href="#consultarProyectoModal" class="btn btn-success" data-bs-toggle="modal"
+                           @onclick="PrepareForConsulta">
                             <i class="material-icons">&#xE8B6;</i> <span>Consultar Proyecto</span>
                         </a>
                         <!-- Botón que abre el modal para consultar un proyecto existente -->
@@ -37,80 +39,84 @@
             </div>
             @if (proyectos == null)
             {
-                <p>Cargando...</p>
-                <!-- Muestra un mensaje mientras se cargan los datos -->
+            <p>Cargando...</p>
+            <!-- Muestra un mensaje mientras se cargan los datos -->
             }
             else if (!proyectos.Any())
             {
-                <p>No hay proyectos registradas.</p>
-                <!-- Muestra un mensaje si no hay proyectos en la lista -->
+            <p>No hay proyectos registradas.</p>
+            <!-- Muestra un mensaje si no hay proyectos en la lista -->
             }
             else
             {
-                <!-- Muestra la tabla con la lista de proyectos si la lista contiene datos -->
-                <table class="table table-striped table-hover">
-                    <thead>
-                        <tr>
-                            <th>Código</th>
-                            <th>Titulo</th>
-                            <th>Resumen</th>
-                            <th>Presupuesto</th>
-                            <th>Tipo financiacion</th>
-                            <th>Tipo fondos</th>
-                            <th>Fecha inicio</th>
-                            <th>Fecha fin</th>
-                        </tr>
-                    </thead>
-    
-                    <tbody>
-                        @foreach (var proyecto in proyectos)
-                        {
-                            <tr>
-                                <td>@proyecto["id"]</td>
-                                <!-- Muestra el código del proyecto-->
-                                <td>@proyecto["titulo"]</td>
-                                <!-- Muestra el titulo del proyecto -->
-                                <td>@proyecto["resumen"]</td>
-                                <!-- Muestra el resumen del proyecto -->
-                                <td>@proyecto["presupuesto"]</td>
-                                <!-- Muestra el presupuesto del proyecto -->
-                                <td>@proyecto["tipo_financiacion"]</td>
-                                <!-- Muestra el tipo de financiacion del proyecto -->
-                                <td>@proyecto["tipo_fondos"]</td>
-                                <!-- Muestra el tipo de fondos del proyecto -->
-                                <td>@proyecto["fecha_inicio"]</td>
-                                <!-- Muestra la fecha de inicio del proyecto -->
-                                <td>@proyecto["fecha_fin"]</td>
-                                <!-- Muestra la fecha final del proyecto -->
-                                <td>
-                                    <a href="#editProyectoModal" class="edit" data-bs-toggle="modal" @onclick="() => PrepareForAddOrEdit(proyecto)">
-                                        <i class="material-icons" data-bs-toggle="tooltip" title="Editar">&#xE254;</i>
-                                    </a>
-                                    <!-- Botón para editar el proyecto -->
- 
-                                    <a href="#deleteProyectoModal" class="delete" data-bs-toggle="modal" @onclick="() => SetProyectoToDelete(proyecto)">
-                                        <i class="material-icons" data-bs-toggle="tooltip" title="Eliminar">&#xE872;</i>
-                                    </a>
-                                    <!-- Botón para eliminar el proyecto -->
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+            <!-- Muestra la tabla con la lista de proyectos si la lista contiene datos -->
+            <table class="table table-striped table-hover">
+                <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Titulo</th>
+                    <th>Resumen</th>
+                    <th>Presupuesto</th>
+                    <th>Tipo financiacion</th>
+                    <th>Tipo fondos</th>
+                    <th>Fecha inicio</th>
+                    <th>Fecha fin</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                @foreach (var proyecto in proyectos)
+                {
+                <tr>
+                    <td>@proyecto["id"]</td>
+                    <!-- Muestra el código del proyecto-->
+                    <td>@proyecto["titulo"]</td>
+                    <!-- Muestra el titulo del proyecto -->
+                    <td>@proyecto["resumen"]</td>
+                    <!-- Muestra el resumen del proyecto -->
+                    <td>@proyecto["presupuesto"]</td>
+                    <!-- Muestra el presupuesto del proyecto -->
+                    <td>@proyecto["tipo_financiacion"]</td>
+                    <!-- Muestra el tipo de financiacion del proyecto -->
+                    <td>@proyecto["tipo_fondos"]</td>
+                    <!-- Muestra el tipo de fondos del proyecto -->
+                    <td>@proyecto["fecha_inicio"]</td>
+                    <!-- Muestra la fecha de inicio del proyecto -->
+                    <td>@proyecto["fecha_fin"]</td>
+                    <!-- Muestra la fecha final del proyecto -->
+                    <td>
+                        <a href="#editProyectoModal" class="edit" data-bs-toggle="modal"
+                           @onclick="() => PrepareForAddOrEdit(proyecto)">
+                            <i class="material-icons" data-bs-toggle="tooltip" title="Editar">&#xE254;</i>
+                        </a>
+                        <!-- Botón para editar el proyecto -->
+
+                        <a href="#deleteProyectoModal" class="delete" data-bs-toggle="modal"
+                           @onclick="() => SetProyectoToDelete(proyecto)">
+                            <i class="material-icons" data-bs-toggle="tooltip" title="Eliminar">&#xE872;</i>
+                        </a>
+                        <!-- Botón para eliminar el proyecto -->
+                    </td>
+                </tr>
+                }
+                </tbody>
+            </table>
             }
         </div>
     </div>
 </div>
- 
+
 <!-- Modal para Añadir/Editar proyecto -->
-<div class="modal fade" id="addProyectoModal" tabindex="-1" role="dialog" aria-labelledby="addProyectoModalLabel" aria-hidden="true">
+<div class="modal fade" id="addProyectoModal" tabindex="-1" role="dialog" aria-labelledby="addProyectoModalLabel"
+     aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <EditForm Model="@currentProyecto" OnValidSubmit="SaveProyecto">
-                <DataAnnotationsValidator />
+                <DataAnnotationsValidator/>
                 <!-- Valida los campos del formulario usando anotaciones de datos en C# -->
                 <div class="modal-header">
-                    <h5 class="modal-title" id="addProyectoModalLabel">@(isNewProyecto ? "Añadir" : "Editar") Proyecto</h5>
+                    <h5 class="modal-title" id="addProyectoModalLabel">@(isNewProyecto ? "Añadir" : "Editar")
+                        Proyecto</h5>
                     <!-- El título del modal cambia según si se está añadiendo o editando un proyecto -->
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -118,50 +124,50 @@
                     <!-- Campos del formulario para ingresar los datos del proyecto -->
                     <div class="form-group">
                         <label>Id</label>
-                        <InputText class="form-control" @bind-Value="id" />
-                        <ValidationMessage For="@(() => id)" />
+                        <InputText class="form-control" @bind-Value="id"/>
+                        <ValidationMessage For="@(() => id)"/>
                         <!-- Campo para ingresar el id del proyecto  -->
                     </div>
                     <div class="form-group">
                         <label>Titulo</label>
-                        <InputText class="form-control" @bind-Value="titulo" />
-                        <ValidationMessage For="@(() => titulo)" />
+                        <InputText class="form-control" @bind-Value="titulo"/>
+                        <ValidationMessage For="@(() => titulo)"/>
                         <!-- Campo para ingresar el titulo del proyecto-->
                     </div>
                     <div class="form-group">
                         <label>Resumen</label>
-                        <InputText class="form-control" @bind-Value="resumen" />
-                        <ValidationMessage For="@(() => resumen)" />
-                         <!-- Campo para ingresar el resumen del proyecto -->
+                        <InputText class="form-control" @bind-Value="resumen"/>
+                        <ValidationMessage For="@(() => resumen)"/>
+                        <!-- Campo para ingresar el resumen del proyecto -->
                     </div>
                     <div class="form-group">
                         <label>Presupuesto</label>
-                        <InputText class="form-control" @bind-Value="presupuesto" />
-                        <ValidationMessage For="@(() => presupuesto)" />
+                        <InputText class="form-control" @bind-Value="presupuesto"/>
+                        <ValidationMessage For="@(() => presupuesto)"/>
                         <!-- Campo para ingresar el presupuesto del proyecto -->
                     </div>
                     <div class="form-group">
                         <label>Tipo de financiacion</label>
-                        <InputText class="form-control" @bind-Value="tipo_financiacion" />
-                        <ValidationMessage For="@(() => tipo_financiacion)" />
+                        <InputText class="form-control" @bind-Value="tipo_financiacion"/>
+                        <ValidationMessage For="@(() => tipo_financiacion)"/>
                         <!-- Campo para ingresar el tipo de financiacion del proyecto -->
                     </div>
                     <div class="form-group">
                         <label>Tipo fondos</label>
-                        <InputText class="form-control" @bind-Value="tipo_fondos" />
-                        <ValidationMessage For="@(() => tipo_fondos)" />
+                        <InputText class="form-control" @bind-Value="tipo_fondos"/>
+                        <ValidationMessage For="@(() => tipo_fondos)"/>
                         <!-- Campo para ingresar el tipo de fondo del proyecto-->
                     </div>
                     <div class="form-group">
                         <label>Fecha de inicio</label>
-                        <InputText class="form-control" @bind-Value="fecha_inicio" />
-                        <ValidationMessage For="@(() => fecha_inicio)" />
+                        <InputText class="form-control" @bind-Value="fecha_inicio"/>
+                        <ValidationMessage For="@(() => fecha_inicio)"/>
                         <!-- Campo para ingresar la fecha de inicio del proyecto -->
                     </div>
                     <div class="form-group">
                         <label>Fecha final</label>
-                        <InputText class="form-control" @bind-Value="fecha_fin" />
-                        <ValidationMessage For="@(() => fecha_fin)" />
+                        <InputText class="form-control" @bind-Value="fecha_fin"/>
+                        <ValidationMessage For="@(() => fecha_fin)"/>
                         <!-- Campo para ingresar la fecha final del proyecto -->
                     </div>
                 </div>
@@ -174,9 +180,10 @@
         </div>
     </div>
 </div>
- 
+
 <!-- Modal para Eliminar proyecto -->
-<div class="modal fade" id="deleteProyectoModal" tabindex="-1" role="dialog" aria-labelledby="deleteProyectoModalLabel" aria-hidden="true">
+<div class="modal fade" id="deleteProyectoModal" tabindex="-1" role="dialog" aria-labelledby="deleteProyectoModalLabel"
+     aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -197,9 +204,10 @@
         </div>
     </div>
 </div>
- 
+
 <!-- Modal para Consultar proyectos -->
-<div class="modal fade" id="consultarProyectoModal" tabindex="-1" role="dialog" aria-labelledby="consultarProyectoModalLabel" aria-hidden="true">
+<div class="modal fade" id="consultarProyectoModal" tabindex="-1" role="dialog"
+     aria-labelledby="consultarProyectoModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -211,145 +219,152 @@
                 <!-- Campos para ingresar el id y mostrar la información del proyecto consultado -->
                 <div class="form-group">
                     <label>Id</label>
-                    <input type="text" class="form-control" @bind="consultaid" @bind:event="oninput" />
+                    <input type="text" class="form-control" @bind="consultaid" @bind:event="oninput"/>
                     <!-- Campo para ingresar el id del proyecto a consultar -->
                 </div>
                 <div class="form-group">
                     <label>Titulo</label>
-                    <input type="text" class="form-control" @bind="consultaTitulo" readonly />
+                    <input type="text" class="form-control" @bind="consultaTitulo" readonly/>
                     <!-- Campo para mostrar el titulo del proyecto consultado, es de solo lectura -->
                 </div>
                 <div class="form-group">
                     <label>Resumen</label>
-                    <input type="text" class="form-control" @bind="consultaResumen" readonly />
+                    <input type="text" class="form-control" @bind="consultaResumen" readonly/>
                     <!-- Campo para mostrar el resumen del  proyecto consultado, es de solo lectura -->
                 </div>
                 <div class="form-group">
                     <label>Presupuesto</label>
-                    <input type="text" class="form-control" @bind="consultaPresupuesto" readonly />
+                    <input type="text" class="form-control" @bind="consultaPresupuesto" readonly/>
                     <!-- Campo para mostrar el presupuesto del proyecto consultado, es de solo lectura -->
                 </div>
-                 <div class="form-group">
+                <div class="form-group">
                     <label>Tipo financiacion</label>
-                    <input type="text" class="form-control" @bind="consultaTipo_financiacion" readonly />
+                    <input type="text" class="form-control" @bind="consultaTipo_financiacion" readonly/>
                     <!-- Campo para mostrar el tipo de financiacion del proyecto consultado, es de solo lectura -->
                 </div>
-                 <div class="form-group">
+                <div class="form-group">
                     <label>Tipo Fondos</label>
-                    <input type="text" class="form-control" @bind="consultaTipo_fondos" readonly />
+                    <input type="text" class="form-control" @bind="consultaTipo_fondos" readonly/>
                     <!-- Campo para mostrar el tipo de fondo del proyecto consultado, es de solo lectura -->
                 </div>
-                 <div class="form-group">
+                <div class="form-group">
                     <label>Fecha de inicio</label>
-                    <input type="text" class="form-control" @bind="consultaFecha_inicio" readonly />
+                    <input type="text" class="form-control" @bind="consultaFecha_inicio" readonly/>
                     <!-- Campo para mostrar la fecha de inicio del proyecto consultado, es de solo lectura -->
                 </div>
-                 <div class="form-group">
+                <div class="form-group">
                     <label>Fecha Final</label>
-                    <input type="text" class="form-control" @bind="consultaFecha_fin" readonly />
+                    <input type="text" class="form-control" @bind="consultaFecha_fin" readonly/>
                     <!-- Campo para mostrar la fecha final del proyecto consultado , es de solo lectura -->
+                </div>
+                <div class="mt-4">
+                    <h5>Detalles del Proyecto</h5>
+                    @if (detallesProyecto != null && detallesProyecto.Any())
+                    {
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Descripción</th>
+                            <th>Detalle</th>
+                            <th>Tipo</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var detalle in detallesProyecto)
+                        {
+                        <tr>
+                            <td>@detalle["descripcion"]</td>
+                            <td>@detalle["detalle"]</td>
+                            <td>@detalle["tipo"]</td>
+                        </tr>
+                        }
+                        </tbody>
+                    </table>
+                    }
+                    else
+                    {
+                    <p>No hay detalles disponibles para este proyecto.</p>
+                    }
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                 <button type="button" class="btn btn-primary" @onclick="ConsultarProyecto">Consultar</button>
                 <!-- Botón para realizar la consulta del proyecto con el id ingresado -->
-                <button type="button" class="btn btn-warning" @onclick="ModificarProyectoConsultado" disabled="@(!proyectoEncontrado)">Modificar</button>
+                <button type="button" class="btn btn-warning" @onclick="ModificarProyectoConsultado"
+                        disabled="@(!proyectoEncontrado)">Modificar
+                </button>
                 <!-- Botón para modificar el proyecto consultado si fue encontrado -->
-                <button type="button" class="btn btn-danger" @onclick="EliminarProyectoConsultado" disabled="@(!proyectoEncontrado)">Eliminar</button>
+                <button type="button" class="btn btn-danger" @onclick="EliminarProyectoConsultado"
+                        disabled="@(!proyectoEncontrado)">Eliminar
+                </button>
                 <!-- Botón para eliminar el proyectoc consultado si fue encontrado -->
             </div>
         </div>
     </div>
 </div>
- 
+
 @code {
-   
     private List<Dictionary<string, object>> proyectos = new List<Dictionary<string, object>>();
     // Lista que almacena los proyectos obtenidos desde la API
-   
+
     private Dictionary<string, object> currentProyecto = new Dictionary<string, object>();
     // Diccionario que representa el proyecto actual que se está añadiendo o editando
- 
+
+    private List<Dictionary<string, object>> detallesProyecto = new List<Dictionary<string, object>>();
     private bool isNewProyecto = true;
     // Bandera que indica si se está añadiendo un nuevo proyecto o editando una existente
- 
-    private bool proyectoEncontrado = false;
-    // Bandera que indica si un proyecto fue encontrada durante la consulta
- 
-    private string id = "";
-    // Variable que almacena el id del proyecto durante la edición o creación
- 
-    private string titulo = "";
-    // Variable que almacena el titulo del proyecto durante la edición o creación
- 
-    private string resumen = "";
-    // Variable que almacena el resumen del proyecto durante la edición o creación
- 
-    private string presupuesto = "";
-    // Variable que almacena el presupuesto del proyecto durante la edición o creación
- 
- private string tipo_financiacion= "";
-    // Variable que almacena el tipo de financiacion del proyecto durante la edición o creación
- 
- private string tipo_fondos = "";
-    // Variable que almacena el tipo de fondos del proyecto durante la edición o creación
- private string fecha_inicio = "";
-    // Variable que almacena la fecha de inicio del proyecto durante la edición o creación
- private string fecha_fin = "";
-    // Variable que almacena la fecha final del proyecto durante la edición o creación
- 
-    private string consultaid = "";
-    // Variable que almacena el id del proyecto que se va a consultar
- 
-    private string consultaTitulo = "";
-    // Variable que almacena el titulo del proyecto que se encontró durante la consulta
- 
-    private string consultaResumen = "";
-    // Variable que almacena el resumen del proyecto que se encontró durante la consulta
-    private string consultaTipo_financiacion = "";
-    // Variable que almacena el tipo de financiacion del proyecto que se encontró durante la consulta
-    private string consultaTipo_fondos = "";
-    // Variable que almacena el tipo de fondo del proyecto que se encontró durante la consulta
-    private string consultaFecha_inicio = "";
-    // Variable que almacena la fecha de inicio que se encontró durante la consulta
-    private string consultaFecha_fin = "";
-    // Variable que almacena la fecha final del proyecto que se encontró durante la consulta
 
+    private bool proyectoEncontrado = false;
+    // Bandera que indica si un proyecto fue encontrado durante la consulta
+
+    private string id = "";
+    private string titulo = "";
+    private string resumen = "";
+    private string presupuesto = "";
+    private string tipo_financiacion = "";
+    private string tipo_fondos = "";
+    private string fecha_inicio = "";
+    private string fecha_fin = "";
+    // Variables que almacenan datos del proyecto durante la edición o creación
+
+    private string consultaid = "";
+    private string consultaTitulo = "";
+    private string consultaResumen = "";
+    private string consultaTipo_financiacion = "";
+    private string consultaTipo_fondos = "";
+    private string consultaFecha_inicio = "";
+    private string consultaFecha_fin = "";
     private string consultaPresupuesto = "";
-    // Variable que almacena el presupusto del proyecto  que se encontró durante la consulta
- 
+    // Variables que almacenan datos del proyecto que se encontró durante la consulta
+
     protected override async Task OnInitializedAsync()
     {
         await LoadProyectos();
         // Método que se ejecuta al inicializar el componente. Carga la lista de proyectos desde la API.
     }
- 
+
     private async Task LoadProyectos()
     {
         try
         {
             proyectos = await ApiService.GetDataAsync("api/p/proyecto");
-            // Llama a la API para obtener la lista de proyectos y la almacena en la variable 'proyectos'.
             StateHasChanged();
             // Fuerza la actualización de la UI después de cargar los datos.
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Error al cargar proyectos: {ex.Message}");
-            // Muestra un error en la consola si la carga de proyectos falla.
             await JSRuntime.InvokeVoidAsync("alert", "Error al cargar proyectos. Por favor, intente nuevamente.");
-            // Muestra una alerta en la página indicando que hubo un error al cargar los proyectos.
         }
     }
- 
-    private void PrepareForAddOrEdit(Dictionary<string, object>? proyecto= null)
+
+    private void PrepareForAddOrEdit(Dictionary<string, object>? proyecto = null)
     {
         isNewProyecto = proyecto == null;
-        // Si 'proyecto' es null, significa que estamos añadiendo un nuevo proyecto. De lo contrario, estamos editando.
         currentProyecto = proyecto ?? new Dictionary<string, object>();
-        // Si 'proyecto' es null, inicializamos un nuevo diccionario. De lo contrario, usamos el diccionario del proyecto seleccionado.
- 
+        // Inicializa el proyecto actual o configura uno nuevo
+
         id = currentProyecto.TryGetValue("id", out var i) ? i?.ToString() ?? "" : "";
         titulo = currentProyecto.TryGetValue("titulo", out var t) ? t?.ToString() ?? "" : "";
         resumen = currentProyecto.TryGetValue("resumen", out var r) ? r?.ToString() ?? "" : "";
@@ -358,36 +373,24 @@
         tipo_fondos = currentProyecto.TryGetValue("tipo_fondos", out var tfo) ? tfo?.ToString() ?? "" : "";
         fecha_inicio = currentProyecto.TryGetValue("fecha_inicio", out var fi) ? fi?.ToString() ?? "" : "";
         fecha_fin = currentProyecto.TryGetValue("fecha_fin", out var ff) ? ff?.ToString() ?? "" : "";
-        // Extrae los valores de 'id', 'titulo', 'resumen' ,'presupuesto''tipo_financiacion''tipo_fondos''fecha_inicio''fecha_fin' de 'currentProyecto' y los asigna a las variables correspondientes.
- 
+        // Extrae y asigna los valores de 'currentProyecto'
+
         JSRuntime.InvokeVoidAsync("showModal", "addProyectoModal");
-        // Muestra el modal para añadir o editar proyectos usando JavaScript.
     }
- 
+
     private void PrepareForConsulta()
     {
-        consultaid = "";
-        consultaTitulo = "";
-        consultaResumen = "";
-        consultaPresupuesto = "";
-        consultaTipo_financiacion= "";
-        consultaTipo_fondos="";
-        consultaFecha_inicio="";
-        consultaFecha_fin="";
+        consultaid = consultaTitulo = consultaResumen = consultaPresupuesto = "";
+        consultaTipo_financiacion = consultaTipo_fondos = consultaFecha_inicio = consultaFecha_fin = "";
         proyectoEncontrado = false;
-        // Limpia los campos de consulta y establece 'proyectoencontrado' en false.
     }
- 
+
     private void SetProyectoToDelete(Dictionary<string, object> proyecto)
     {
         currentProyecto = proyecto;
-        // Establece el proyecto actual como el proyecto  a eliminar.
         JSRuntime.InvokeVoidAsync("showModal", "deleteProyectoModal");
-        // Muestra el modal para confirmar la eliminación usando JavaScript.
- 
- 
     }
-   
+
     private async Task SaveProyecto()
     {
         try
@@ -396,87 +399,52 @@
             currentProyecto["titulo"] = titulo;
             currentProyecto["resumen"] = resumen;
             currentProyecto["presupuesto"] = presupuesto;
-             currentProyecto["tipo_financiacion"] = tipo_financiacion;
+            currentProyecto["tipo_financiacion"] = tipo_financiacion;
             currentProyecto["tipo_fondos"] = tipo_fondos;
             currentProyecto["fecha_inicio"] = fecha_inicio;
             currentProyecto["fecha_fin"] = fecha_fin;
-            // Actualiza 'currentProyecto' con los valores actuales de los campos de entrada.
- 
-            bool success;
-            if (isNewProyecto)
-            {
-                success = await ApiService.AddEntityAsync("api/p/proyecto", currentProyecto);
-                await LoadProyectos();
-               
-                // Si estamos añadiendo un nuevo proyecto, llama a la API para añadir el nuevo proyecto.
-            }
-            else
-            {
-                success = await ApiService.EditEntityAsync("api/p/proyecto/id", id, currentProyecto);
-                await LoadProyectos();
-                // Si estamos editando un proyecto existente, llama a la API para editarla.
-            }
- 
+
+            bool success = isNewProyecto
+                ? await ApiService.AddEntityAsync("api/p/proyecto", currentProyecto)
+                : await ApiService.EditEntityAsync("api/p/proyecto/id", id, currentProyecto);
+
             if (success)
             {
- 
                 await JSRuntime.InvokeVoidAsync("hideModal", "addProyectoModal");
-                // Si la operación tiene éxito, cierra el modal.
- 
                 await LoadProyectos();
-                // Recarga la lista de proyectos para reflejar los cambios.
- 
-                id = titulo = resumen = presupuesto = tipo_financiacion = tipo_fondos = fecha_inicio = fecha_fin = string.Empty;
+                id = titulo = resumen = presupuesto = tipo_financiacion = tipo_fondos = fecha_inicio = fecha_fin = "";
                 currentProyecto = new Dictionary<string, object>();
-                isNewProyecto= true;
-                // Limpia los campos del formulario y restablece el estado.
- 
-                StateHasChanged();
-               
-                // Fuerza la actualización de la UI.
-               
-               await LoadProyectos();
- 
-                await JSRuntime.InvokeVoidAsync("alert", "Operación realizada con éxito1.");
-               
-               
-                // Muestra un mensaje de éxito al usuario.
+                isNewProyecto = true;
+                await JSRuntime.InvokeVoidAsync("alert", "Operación realizada con éxito.");
             }
             else
             {
                 await JSRuntime.InvokeVoidAsync("alert", "Error al guardar el proyecto. Por favor, intente nuevamente.");
-                // Si la operación falla, muestra un mensaje de error.
             }
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Error al guardar el proyecto: {ex.Message}");
             await JSRuntime.InvokeVoidAsync("alert", "Error al guardar el proyecto. Por favor, intente nuevamente.");
-            // Muestra un error en la consola y una alerta si hay una excepción durante el guardado.
         }
     }
- 
+
     private async Task DeleteProyecto()
     {
         try
         {
             if (currentProyecto.TryGetValue("id", out var codigoObj) && codigoObj is string codigoStr)
             {
-               
                 bool success = await ApiService.DeleteEntityAsync("api/p/proyecto/id", codigoStr);
-                // Si se encuentra el código del proyecto actual, llama a la API para eliminarla.
                 if (success)
                 {
                     await JSRuntime.InvokeVoidAsync("hideModal", "deleteProyectoModal");
                     await LoadProyectos();
                     await JSRuntime.InvokeVoidAsync("alert", "Proyecto eliminado con éxito.");
-                    // Si la operación tiene éxito, cierra el modal, recarga la lista de proyectos y muestra un mensaje de éxito.
                 }
                 else
                 {
-                   
                     await JSRuntime.InvokeVoidAsync("alert", "Error al eliminar el proyecto. Por favor, intente nuevamente.");
-                    // Si la operación falla, muestra un mensaje de error.
                 }
             }
         }
@@ -484,52 +452,43 @@
         {
             Console.WriteLine($"Error al eliminar proyecto: {ex.Message}");
             await JSRuntime.InvokeVoidAsync("alert", "Error al eliminar el proyecto. Por favor, intente nuevamente.");
-            // Muestra un error en la consola y una alerta si hay una excepción durante la eliminación.
         }
     }
- 
+
     private async Task ConsultarProyecto()
     {
         try
         {
             var resultado = await ApiService.GetDataAsync($"api/proyecto/proyecto/id/{consultaid}");
+            detallesProyecto = (await ApiService.GetDataAsync($"api/proyectos/detalles-combinados/{consultaid}")) as List<Dictionary<string, object>> ?? new List<Dictionary<string, object>>();
+
             if (resultado.Any())
             {
                 var proyectoConsultado = resultado.First();
                 consultaTitulo = proyectoConsultado["titulo"]?.ToString() ?? "";
                 consultaResumen = proyectoConsultado["resumen"]?.ToString() ?? "";
                 consultaPresupuesto = proyectoConsultado["presupuesto"]?.ToString() ?? "";
-                consultaTipo_financiacion=proyectoConsultado["tipo_financiacion"]?.ToString() ?? "";
-                consultaTipo_fondos=proyectoConsultado["tipo_fondos"]?.ToString() ?? "";
-                consultaFecha_inicio=proyectoConsultado["fecha_inicio"]?.ToString() ?? "";
-                consultaFecha_fin=proyectoConsultado["fecha_fin"]?.ToString() ?? "";
+                consultaTipo_financiacion = proyectoConsultado["tipo_financiacion"]?.ToString() ?? "";
+                consultaTipo_fondos = proyectoConsultado["tipo_fondos"]?.ToString() ?? "";
+                consultaFecha_inicio = proyectoConsultado["fecha_inicio"]?.ToString() ?? "";
+                consultaFecha_fin = proyectoConsultado["fecha_fin"]?.ToString() ?? "";
                 proyectoEncontrado = true;
-                // Si se encuentra un proyecto con el código consultado, muestra los datos en los campos correspondientes.
             }
             else
             {
-                consultaTitulo = "";
-                consultaResumen= "";
-                consultaPresupuesto = "";
-                 consultaTipo_financiacion="";
-                consultaTipo_fondos="";
-                consultaFecha_inicio="";
-                consultaFecha_fin="";
+                consultaTitulo = consultaResumen = consultaPresupuesto = consultaTipo_financiacion = consultaTipo_fondos = consultaFecha_inicio = consultaFecha_fin = "";
                 proyectoEncontrado = false;
                 await JSRuntime.InvokeVoidAsync("alert", "No se encontró ningun proyecto con ese código.");
-                // Si no se encuentra ningun proyecto, limpia los campos y muestra un mensaje de alerta.
             }
             StateHasChanged();
-            // Fuerza la actualización de la UI para reflejar los cambios.
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Error al consultar proyecto: {ex.Message}");
-            await JSRuntime.InvokeVoidAsync("alert", "Error al consultar la proyecto. Por favor, intente nuevamente.");
-            // Muestra un error en la consola y una alerta si hay una excepción durante la consulta.
+            await JSRuntime.InvokeVoidAsync("alert", "Error al consultar el proyecto. Por favor, intente nuevamente.");
         }
     }
- 
+
     private async Task ModificarProyectoConsultado()
     {
         PrepareForAddOrEdit(new Dictionary<string, object>
@@ -538,15 +497,14 @@
             ["titulo"] = consultaTitulo,
             ["resumen"] = consultaResumen,
             ["presupuesto"] = consultaPresupuesto,
-            ["tipo_financiacion"]= consultaTipo_financiacion,
-            ["tipo_fondos"]= consultaTipo_fondos,
-            ["fecha_inicio"]=  consultaFecha_inicio,
-            ["fecha_fin"]=  consultaFecha_fin,
+            ["tipo_financiacion"] = consultaTipo_financiacion,
+            ["tipo_fondos"] = consultaTipo_fondos,
+            ["fecha_inicio"] = consultaFecha_inicio,
+            ["fecha_fin"] = consultaFecha_fin,
         });
         await JSRuntime.InvokeVoidAsync("hideModal", "consultarProyectoModal");
-        // Prepara los datos consultados para la edición y cierra el modal de consulta.
     }
- 
+
     private async Task EliminarProyectoConsultado()
     {
         SetProyectoToDelete(new Dictionary<string, object>
@@ -555,13 +513,11 @@
             ["titulo"] = consultaTitulo,
             ["resumen"] = consultaResumen,
             ["telefono"] = consultaPresupuesto,
-            ["tipo_financiacion"]= consultaTipo_financiacion,
-            ["tipo_fondos"]= consultaTipo_fondos,
-            ["fecha_inicio"]=  consultaFecha_inicio,
-            ["fecha_fin"]=  consultaFecha_fin,
+            ["tipo_financiacion"] = consultaTipo_financiacion,
+            ["tipo_fondos"] = consultaTipo_fondos,
+            ["fecha_inicio"] = consultaFecha_inicio,
+            ["fecha_fin"] = consultaFecha_fin,
         });
         await JSRuntime.InvokeVoidAsync("hideModal", "consultarProyectoModal");
-        // Prepara los datos consultados para la eliminación y cierra el modal de consulta.
     }
-   
 }
