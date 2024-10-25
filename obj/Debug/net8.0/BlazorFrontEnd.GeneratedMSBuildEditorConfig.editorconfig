@@ -26,8 +26,16 @@ build_property._RazorSourceGeneratorDebug =
 build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Mateo Marquez/Desktop/proyectosVSCODE/BlazorFrontEnd/Pages/Ac_proyecto.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWNfcHJveWVjdG8ucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Mateo Marquez/Desktop/proyectosVSCODE/BlazorFrontEnd/Pages/Counter.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ291bnRlci5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Mateo Marquez/Desktop/proyectosVSCODE/BlazorFrontEnd/Pages/Desarrolla.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRGVzYXJyb2xsYS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Mateo Marquez/Desktop/proyectosVSCODE/BlazorFrontEnd/Pages/Home.razor]
@@ -40,6 +48,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/Mateo Marquez/Desktop/proyectosVSCODE/BlazorFrontEnd/Pages/Persona.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGVyc29uYS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Mateo Marquez/Desktop/proyectosVSCODE/BlazorFrontEnd/Pages/Producto.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJvZHVjdG8ucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Mateo Marquez/Desktop/proyectosVSCODE/BlazorFrontEnd/Pages/Proyecto.razor]

@@ -1,0 +1,516 @@
+@page "/producto"
+
+@using BlazorFrontEnd.Services
+<!--
+// Importa el espacio de nombres BlazorFrontEnd.Services para que puedas utilizar los servicios dentro de este componente.
+-->
+@inject ApiService ApiService
+<!--
+// Inyecta una instancia del servicio ApiService. Esto permite que el componente llame a la API a través de este servicio.
+-->
+@inject IJSRuntime JSRuntime
+<!--
+// Inyecta IJSRuntime, que es un servicio Blazor para ejecutar JavaScript desde C#.
+-->
+
+<div class="container-xl">
+    <div class="table-responsive">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h2>Gestionar <b>Productos</b></h2>
+                        <!-- Título de la tabla que indica que se trata de la gestión de Producto -->
+                    </div>
+                    <div class="col-sm-6">
+                        <a href="#addProyectoModal" class="btn btn-success" data-bs-toggle="modal" @onclick="() => PrepareForAddOrEdit()">
+                            <i class="material-icons">&#xE147;</i> <span>Añadir Nuevo Producto</span>
+                        </a>
+                        <!-- Botón que abre el modal para añadir un nuevo Producto -->
+ 
+                        <a href="#consultarProyectoModal" class="btn btn-success" data-bs-toggle="modal" @onclick="PrepareForConsulta">
+                            <i class="material-icons">&#xE8B6;</i> <span>Consultar Producto</span>
+                        </a>
+                        <!-- Botón que abre el modal para consultar un Producto existente -->
+                    </div>
+                </div>
+            </div>
+            @if (productos == null)
+            {
+                <p>Cargando...</p>
+                <!-- Muestra un mensaje mientras se cargan los datos -->
+            }
+            else if (!productos.Any())
+            {
+                <p>No hay proyectos registradas.</p>
+                <!-- Muestra un mensaje si no hay producto en la lista -->
+            }
+            else
+            {
+                <!-- Muestra la tabla con la lista de producto si la lista contiene datos -->
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Codigo</th>
+                            <th>Nombre</th>
+                            <th>Categoria</th>
+                            <th>Fecha de Entrega</th>
+                            <th>Proyecto</th>
+                            <th>Tipo de Producto</th>
+                        </tr>
+                    </thead>
+    
+                    <tbody>
+                        @foreach (var producto in productos)
+                        {
+                            <tr>
+                                <td>@producto["id"]</td>
+                                <!-- Muestra el código del producto-->
+                                <td>@producto["nombre"]</td>
+                                <!-- Muestra el nombre del producto -->
+                                <td>@producto["categoria"]</td>
+                                <!-- Muestra el categoria del producto -->
+                                <td>@producto["fecha_entrega"]</td>
+                                <!-- Muestra el Fecha de Entrega del producto -->
+                                <td>@producto["proyecto"]</td>
+                                <!-- Muestra el proyecto del producto -->
+                                <td>@producto["tipo_producto"]</td>
+                                <!-- Muestra el tipo de Producto del producto -->
+                                <td>
+                                    <a href="#editProyectoModal" class="edit" data-bs-toggle="modal" @onclick="() => PrepareForAddOrEdit(producto)">
+                                        <i class="material-icons" data-bs-toggle="tooltip" title="Editar">&#xE254;</i>
+                                    </a>
+                                    <!-- Botón para editar el proyecto -->
+ 
+                                    <a href="#deleteProyectoModal" class="delete" data-bs-toggle="modal" @onclick="() => SetProyectoToDelete(producto)">
+                                        <i class="material-icons" data-bs-toggle="tooltip" title="Eliminar">&#xE872;</i>
+                                    </a>
+                                    <!-- Botón para eliminar el proyecto -->
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    </div>
+</div>
+ 
+<!-- Modal para Añadir/Editar proyecto -->
+<div class="modal fade" id="addProyectoModal" tabindex="-1" role="dialog" aria-labelledby="addProyectoModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <EditForm Model="@currentProducto" OnValidSubmit="SaveProyecto">
+                <DataAnnotationsValidator />
+                <!-- Valida los campos del formulario usando anotaciones de datos en C# -->
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addProyectoModalLabel">@(isNewProducto ? "Añadir" : "Editar") Proyecto</h5>
+                    <!-- El título del modal cambia según si se está añadiendo o editando un proyecto -->
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Campos del formulario para ingresar los datos del proyecto -->
+                    <div class="form-group">
+                        <label>Id</label>
+                        <InputText class="form-control" @bind-Value="id" />
+                        <ValidationMessage For="@(() => id)" />
+                        <!-- Campo para ingresar el id del proyecto  -->
+                    </div>
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <InputText class="form-control" @bind-Value="nombre" />
+                        <ValidationMessage For="@(() => nombre)" />
+                        <!-- Campo para ingresar el titulo del proyecto-->
+                    </div>
+                    <div class="form-group">
+                        <label>Categoria</label>
+                        <InputText class="form-control" @bind-Value="categoria" />
+                        <ValidationMessage For="@(() => categoria)" />
+                         <!-- Campo para ingresar el resumen del proyecto -->
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha de Entrega</label>
+                        <InputText class="form-control" @bind-Value="fecha_entrega" />
+                        <ValidationMessage For="@(() => fecha_entrega)" />
+                        <!-- Campo para ingresar el presupuesto del proyecto -->
+                    </div>
+                    <div class="form-group">
+                        <label>Proyecto</label>
+                        <InputText class="form-control" @bind-Value="proyecto" />
+                        <ValidationMessage For="@(() => proyecto)" />
+                        <!-- Campo para ingresar el tipo de financiacion del proyecto -->
+                    </div>
+                    <div class="form-group">
+                        <label>Tipo de Producto</label>
+                        <InputText class="form-control" @bind-Value="tipo_producto" />
+                        <ValidationMessage For="@(() => tipo_producto)" />
+                        <!-- Campo para ingresar el tipo de fondo del proyecto-->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">@(isNewProducto ? "Añadir" : "Guardar")</button>
+                    <!-- Botón de acción que cambia según si se está añadiendo o guardando -->
+                </div>
+            </EditForm>
+        </div>
+    </div>
+</div>
+ 
+<!-- Modal para Eliminar proyecto -->
+<div class="modal fade" id="deleteProyectoModal" tabindex="-1" role="dialog" aria-labelledby="deleteProyectoModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteProyectoModalLabel">Eliminar Producto</h5>
+                <!-- Título del modal para eliminar un proyecto-->
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>¿Está seguro de que desea eliminar este producto?</p>
+                <p class="text-warning"><small>Esta acción no se puede deshacer.</small></p>
+                <!-- Mensaje de advertencia para la eliminación -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" @onclick="DeleteProducto">Eliminar</button>
+                <!-- Botón para confirmar la eliminación del proyecto-->
+            </div>
+        </div>
+    </div>
+</div>
+ 
+<!-- Modal para Consultar proyectos -->
+<div class="modal fade" id="consultarProyectoModal" tabindex="-1" role="dialog" aria-labelledby="consultarProyectoModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="consultarProyectoModalLabel">Consultar Producto</h5>
+                <!-- Título del modal para consultar un proyecto-->
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Campos para ingresar el id y mostrar la información del proyecto consultado -->
+                <div class="form-group">
+                    <label>Id</label>
+                    <input type="text" class="form-control" @bind="consultaid" @bind:event="oninput" />
+                    <!-- Campo para ingresar el id del proyecto a consultar -->
+                </div>
+                <div class="form-group">
+                    <label>Nombre</label>
+                    <input type="text" class="form-control" @bind="consultaNombre" readonly />
+                    <!-- Campo para mostrar el titulo del proyecto consultado, es de solo lectura -->
+                </div>
+                <div class="form-group">
+                    <label>Categoria</label>
+                    <input type="text" class="form-control" @bind="consultaCategoria" readonly />
+                    <!-- Campo para mostrar el resumen del  proyecto consultado, es de solo lectura -->
+                </div>
+                <div class="form-group">
+                    <label>Fecha de Entrega</label>
+                    <input type="text" class="form-control" @bind="consultaFecha_entrega" readonly />
+                    <!-- Campo para mostrar el presupuesto del proyecto consultado, es de solo lectura -->
+                </div>
+                 <div class="form-group">
+                    <label>Proyecto</label>
+                    <input type="text" class="form-control" @bind="consultaProyecto" readonly />
+                    <!-- Campo para mostrar el tipo de financiacion del proyecto consultado, es de solo lectura -->
+                </div>
+                 <div class="form-group">
+                    <label>Tipo de Producto</label>
+                    <input type="text" class="form-control" @bind="consultaTipo_Producto" readonly />
+                    <!-- Campo para mostrar el tipo de fondo del proyecto consultado, es de solo lectura -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" @onclick="ConsultarProducto">Consultar</button>
+                <!-- Botón para realizar la consulta del proyecto con el id ingresado -->
+                <button type="button" class="btn btn-warning" @onclick="ModificarProductoConsultado" disabled="@(!productoEncontrado)">Modificar</button>
+                <!-- Botón para modificar el proyecto consultado si fue encontrado -->
+                <button type="button" class="btn btn-danger" @onclick="EliminarProductoConsultado" disabled="@(!productoEncontrado)">Eliminar</button>
+                <!-- Botón para eliminar el proyectoc consultado si fue encontrado -->
+            </div>
+        </div>
+    </div>
+</div>
+ 
+@code {
+   
+    private List<Dictionary<string, object>> productos = new List<Dictionary<string, object>>();
+    // Lista que almacena los productos obtenidos desde la API
+   
+    private Dictionary<string, object> currentProducto = new Dictionary<string, object>();
+    // Diccionario que representa el proyecto actual que se está añadiendo o editando
+ 
+    private bool isNewProducto = true;
+    // Bandera que indica si se está añadiendo un nuevo proyecto o editando una existente
+ 
+    private bool productoEncontrado = false;
+    // Bandera que indica si un proyecto fue encontrada durante la consulta
+ 
+    private string id = "";
+    // Variable que almacena el id del proyecto durante la edición o creación
+ 
+    private string nombre = "";
+    // Variable que almacena el titulo del proyecto durante la edición o creación
+ 
+    private string categoria = "";
+    // Variable que almacena el resumen del proyecto durante la edición o creación
+ 
+    private string fecha_entrega = "";
+    // Variable que almacena el presupuesto del proyecto durante la edición o creación
+ 
+ private string proyecto= "";
+    // Variable que almacena el tipo de financiacion del proyecto durante la edición o creación
+ 
+ private string tipo_producto = "";
+    // Variable que almacena el tipo de fondos del proyecto durante la edición o creación
+ 
+    private string consultaid = "";
+    // Variable que almacena el id del proyecto que se va a consultar
+
+    private string consultaNombre = "";
+ 
+    private string consultaCategoria = "";
+    // Variable que almacena el resumen del proyecto que se encontró durante la consulta
+    private string consultaFecha_entrega = "";
+    // Variable que almacena el tipo de financiacion del proyecto que se encontró durante la consulta
+
+    private string consultaProyecto = "";
+    private string consultaTipo_Producto = "";
+    // Variable que almacena el tipo de fondo del proyecto que se encontró durante la consulta
+ 
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadProductos();
+        // Método que se ejecuta al inicializar el componente. Carga la lista de proyectos desde la API.
+    }
+ 
+    private async Task LoadProductos()
+    {
+        try
+        {
+            productos = await ApiService.GetDataAsync("api/p/producto");
+            // Llama a la API para obtener la lista de proyectos y la almacena en la variable 'proyectos'.
+            StateHasChanged();
+            // Fuerza la actualización de la UI después de cargar los datos.
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al cargar proyectos: {ex.Message}");
+            // Muestra un error en la consola si la carga de proyectos falla.
+            await JSRuntime.InvokeVoidAsync("alert", "Error al cargar proyectos. Por favor, intente nuevamente.");
+            // Muestra una alerta en la página indicando que hubo un error al cargar los proyectos.
+        }
+    }
+ 
+    private void PrepareForAddOrEdit(Dictionary<string, object>? producto= null)
+    {
+        isNewProducto = producto == null;
+        // Si 'producto' es null, significa que estamos añadiendo un nuevo producto. De lo contrario, estamos editando.
+        currentProducto = producto ?? new Dictionary<string, object>();
+        // Si 'producto' es null, inicializamos un nuevo diccionario. De lo contrario, usamos el diccionario del proyecto seleccionado.
+ 
+        id = currentProducto.TryGetValue("id", out var i) ? i?.ToString() ?? "" : "";
+        nombre = currentProducto.TryGetValue("nombre", out var t) ? t?.ToString() ?? "" : "";
+        categoria = currentProducto.TryGetValue("categoria", out var r) ? r?.ToString() ?? "" : "";
+        fecha_entrega = currentProducto.TryGetValue("fecha_entrega", out var p) ? p?.ToString() ?? "" : "";
+        proyecto = currentProducto.TryGetValue("proyecto", out var tf) ? tf?.ToString() ?? "" : "";
+        tipo_producto = currentProducto.TryGetValue("tipo_producto", out var tfo) ? tfo?.ToString() ?? "" : "";
+        // Extrae los valores de 'id', 'titulo', 'resumen' ,'presupuesto''tipo_financiacion''tipo_fondos''fecha_inicio''fecha_fin' de 'currentProyecto' y los asigna a las variables correspondientes.
+ 
+        JSRuntime.InvokeVoidAsync("showModal", "addProyectoModal");
+        // Muestra el modal para añadir o editar proyectos usando JavaScript.
+    }
+ 
+    private void PrepareForConsulta()
+    {
+        consultaid = "";
+        consultaNombre = "";
+        consultaCategoria = "";
+        consultaFecha_entrega = "";
+        consultaProyecto= "";
+        consultaTipo_Producto="";
+        productoEncontrado = false;
+        // Limpia los campos de consulta y establece 'proyectoencontrado' en false.
+    }
+ 
+    private void SetProyectoToDelete(Dictionary<string, object> producto)
+    {
+        currentProducto = producto;
+        // Establece el proyecto actual como el proyecto  a eliminar.
+        JSRuntime.InvokeVoidAsync("showModal", "deleteProyectoModal");
+        // Muestra el modal para confirmar la eliminación usando JavaScript.
+ 
+ 
+    }
+   
+    private async Task SaveProyecto()
+    {
+        try
+        {
+            currentProducto["id"] = id;
+            currentProducto["nombre"] = nombre;
+            currentProducto["categoria"] = categoria;
+            currentProducto["fecha_entrega"] = fecha_entrega;
+             currentProducto["proyecto"] = proyecto;
+            currentProducto["tipo_producto"] = tipo_producto;
+            // Actualiza 'currentProducto' con los valores actuales de los campos de entrada.
+ 
+            bool success;
+            if (isNewProducto)
+            {
+                success = await ApiService.AddEntityAsync("api/p/producto", currentProducto);
+                await LoadProductos();
+               
+                // Si estamos añadiendo un nuevo proyecto, llama a la API para añadir el nuevo proyecto.
+            }
+            else
+            {
+                success = await ApiService.EditEntityAsync("api/p/producto/id", id, currentProducto);
+                await LoadProductos();
+                // Si estamos editando un proyecto existente, llama a la API para editarla.
+            }
+ 
+            if (success)
+            {
+ 
+                await JSRuntime.InvokeVoidAsync("hideModal", "addProyectoModal");
+                // Si la operación tiene éxito, cierra el modal.
+ 
+                await LoadProductos();
+                // Recarga la lista de proyectos para reflejar los cambios.
+ 
+                id = nombre = categoria = fecha_entrega = proyecto = tipo_producto = string.Empty;
+                currentProducto = new Dictionary<string, object>();
+                isNewProducto= true;
+                // Limpia los campos del formulario y restablece el estado.
+ 
+                StateHasChanged();
+               
+                // Fuerza la actualización de la UI.
+               
+               await LoadProductos();
+ 
+                await JSRuntime.InvokeVoidAsync("alert", "Operación realizada con éxito1.");
+               
+               
+                // Muestra un mensaje de éxito al usuario.
+            }
+            else
+            {
+                await JSRuntime.InvokeVoidAsync("alert", "Error al guardar el producto. Por favor, intente nuevamente.");
+                // Si la operación falla, muestra un mensaje de error.
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al guardar el producto: {ex.Message}");
+            await JSRuntime.InvokeVoidAsync("alert", "Error al guardar el producto. Por favor, intente nuevamente.");
+            // Muestra un error en la consola y una alerta si hay una excepción durante el guardado.
+        }
+    }
+ 
+    private async Task DeleteProducto()
+    {
+        try
+        {
+            if (currentProducto.TryGetValue("id", out var codigoObj) && codigoObj is string id)
+            {
+               
+                bool success = await ApiService.DeleteEntityAsync("api/p/producto/id", id);
+                // Si se encuentra el código del proyecto actual, llama a la API para eliminarla.
+                if (success)
+                {
+                    await JSRuntime.InvokeVoidAsync("hideModal", "deleteProyectoModal");
+                    await LoadProductos();
+                    await JSRuntime.InvokeVoidAsync("alert", "Producto eliminado con éxito.");
+                    // Si la operación tiene éxito, cierra el modal, recarga la lista de proyectos y muestra un mensaje de éxito.
+                }
+                else
+                {
+                   
+                    await JSRuntime.InvokeVoidAsync("alert", "Error al eliminar el producto. Por favor, intente nuevamente.");
+                    // Si la operación falla, muestra un mensaje de error.
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al eliminar producto: {ex.Message}");
+            await JSRuntime.InvokeVoidAsync("alert", "Error al eliminar el producto. Por favor, intente nuevamente.");
+            // Muestra un error en la consola y una alerta si hay una excepción durante la eliminación.
+        }
+    }
+ 
+    private async Task ConsultarProducto()
+    {
+        try
+        {
+            var resultado = await ApiService.GetDataAsync($"api/producto/producto/id/{consultaid}");
+            if (resultado.Any())
+            {
+                var productoConsultado = resultado.First();
+                consultaNombre = productoConsultado["nombre"]?.ToString() ?? "";
+                consultaCategoria = productoConsultado["categoria"]?.ToString() ?? "";
+                consultaFecha_entrega = productoConsultado["fecha_entrega"]?.ToString() ?? "";
+                consultaProyecto=productoConsultado["proyecto"]?.ToString() ?? "";
+                consultaTipo_Producto=productoConsultado["tipo_producto"]?.ToString() ?? "";
+                productoEncontrado = true;
+                // Si se encuentra un proyecto con el código consultado, muestra los datos en los campos correspondientes.
+            }
+            else
+            {
+                consultaNombre = "";
+                consultaCategoria= "";
+                consultaFecha_entrega = "";
+                 consultaProyecto="";
+                consultaTipo_Producto="";   
+                productoEncontrado = false;
+                await JSRuntime.InvokeVoidAsync("alert", "No se encontró ningun producto con ese código.");
+                // Si no se encuentra ningun proyecto, limpia los campos y muestra un mensaje de alerta.
+            }
+            StateHasChanged();
+            // Fuerza la actualización de la UI para reflejar los cambios.
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al consultar proyecto: {ex.Message}");
+            await JSRuntime.InvokeVoidAsync("alert", "Error al consultar la proyecto. Por favor, intente nuevamente.");
+            // Muestra un error en la consola y una alerta si hay una excepción durante la consulta.
+        }
+    }
+ 
+    private async Task ModificarProductoConsultado()
+    {
+        PrepareForAddOrEdit(new Dictionary<string, object>
+        {
+            ["id"] = consultaid,
+            ["nombre"] = consultaNombre,
+            ["categoria"] = consultaCategoria,
+            ["fecha_entrega"] = consultaFecha_entrega,
+            ["proyecto"]= consultaProyecto,
+            ["tipo_producto"]= consultaTipo_Producto,
+           
+        });
+        await JSRuntime.InvokeVoidAsync("hideModal", "consultarProyectoModal");
+        // Prepara los datos consultados para la edición y cierra el modal de consulta.
+    }
+ 
+    private async Task EliminarProductoConsultado()
+    {
+        SetProyectoToDelete(new Dictionary<string, object>
+        {
+            ["id"] = consultaid,
+            ["nombre"] = consultaNombre,
+            ["categoria"] = consultaCategoria,
+            ["fecha_entrega"] = consultaFecha_entrega,
+            ["proyecto"]= consultaProyecto,
+            ["tipo_producto"]= consultaTipo_Producto,
+        });
+        await JSRuntime.InvokeVoidAsync("hideModal", "consultarProyectoModal");
+        // Prepara los datos consultados para la eliminación y cierra el modal de consulta.
+    }
+   
+}

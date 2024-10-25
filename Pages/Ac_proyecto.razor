@@ -1,0 +1,429 @@
+@page "/ac_proyecto"
+<!--
+Define la URL relativa que carga este componente. En este caso, cuando un usuario navega a "/ac_proyecto",
+este componente Blazor se carga y se representa en la página.
+-->
+@using BlazorFrontEnd.Services
+<!--
+// Importa el espacio de nombres BlazorFrontEnd.Services para que puedas utilizar los servicios dentro de este componente.
+-->
+@inject ApiService ApiService
+<!--
+// Inyecta una instancia del servicio ApiService. Esto permite que el componente llame a la API a través de este servicio.
+-->
+@inject IJSRuntime JSRuntime
+<!--
+// Inyecta IJSRuntime, que es un servicio Blazor para ejecutar JavaScript desde C#.
+-->
+<div class="container-xl">
+    <div class="table-responsive">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h2>Gestionar <b>Ac Proyecto</b></h2>
+                        <!-- Título de la tabla que indica que se trata de la gestión de ac proyecto -->
+                    </div>
+                    <div class="col-sm-6">
+                        <a href="#addAc_ProyectoModal" class="btn btn-success" data-bs-toggle="modal" @onclick="() => PrepareForAddOrEdit()">
+                            <i class="material-icons">&#xE147;</i> <span>Añadir Nuevo Ac Proyecto</span>
+                        </a>
+                        <!-- Botón que abre el modal para añadir una nuevo ac proyecto -->
+ 
+                        <a href="#consultarAc_ProyectoModal" class="btn btn-success" data-bs-toggle="modal" @onclick="PrepareForConsulta">
+                            <i class="material-icons">&#xE8B6;</i> <span>Consultar Ac Proyecto</span>
+                        </a>
+                        <!-- Botón que abre el modal para consultar un ac proyecto existente -->
+                    </div>
+                </div>
+            </div>
+            @if (Ac_Proyectos == null)
+            {
+                <p>Cargando...</p>
+                <!-- Muestra un mensaje mientras se cargan los datos -->
+            }
+            else if (!Ac_Proyectos.Any())
+            {
+                <p>No hay Ac Proyecto registrados.</p>
+                <!-- Muestra un mensaje si no hay ac proyecto en la lista -->
+            }
+            else
+            {
+                <!-- Muestra la tabla con la lista de ac proyecto si la lista contiene datos -->
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            
+                            <th>Proyecto</th>
+                            <th>Area de conocimiento</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var Ac_Proyecto in Ac_Proyectos)
+                        {
+                            <tr>
+                                
+                                <td>@Ac_Proyecto["proyecto"]</td>
+                                <!-- Muestra el proyecto -->
+                                <td>@Ac_Proyecto["area_conocimiento"]</td>
+                                <!-- Muestra el area de conocimiento-->
+                                <td>
+                                    <a href="#editAc_ProyectoModal" class="edit" data-bs-toggle="modal" @onclick="() => PrepareForAddOrEdit(Ac_Proyecto)">
+                                        <i class="material-icons" data-bs-toggle="tooltip" title="Editar">&#xE254;</i>
+                                    </a>
+                                    <!-- Botón para editar ac proyecto -->
+ 
+                                    <a href="#deleteAc_ProyectoModal" class="delete" data-bs-toggle="modal" @onclick="() => SetAc_ProyectoToDelete(Ac_Proyecto)">
+                                        <i class="material-icons" data-bs-toggle="tooltip" title="Eliminar">&#xE872;</i>
+                                    </a>
+                                    <!-- Botón para eliminar ac proyecto-->
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    </div>
+</div>
+ 
+<!-- Modal para Añadir/Editar ac proyecto -->
+<div class="modal fade" id="addAc_ProyectoModal" tabindex="-1" role="dialog" aria-labelledby="addAc_ProyectoModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <EditForm Model="@currentAc_Proyecto" OnValidSubmit="SaveAc_Proyecto">
+                <DataAnnotationsValidator />
+                <!-- Valida los campos del formulario usando anotaciones de datos en C# -->
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addPAc_ProyectoModalLabel">@(isNewAc_Proyecto ? "Añadir" : "Editar") Ac Proyecto</h5>
+                    <!-- El título del modal cambia según si se está añadiendo o editando un ac proyecto -->
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Campos del formulario para ingresar los datos de ac proyecto -->
+                    
+                    <div class="form-group">
+                        <label>Proyecto</label>
+                        <InputText class="form-control" @bind-Value="proyecto" />
+                        <ValidationMessage For="@(() => proyecto)" />
+                        <!-- Campo para ingresar elac proyecto -->
+                    </div>
+                    <div class="form-group">
+                        <label>Area conocimiento</label>
+                        <InputText class="form-control" @bind-Value="area_conocimiento" />
+                        <ValidationMessage For="@(() => area_conocimiento)" />
+                        <!-- Campo para ingresar el area conocimiento-->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">@(isNewAc_Proyecto ? "Añadir" : "Guardar")</button>
+                    <!-- Botón de acción que cambia según si se está añadiendo o guardando -->
+                </div>
+            </EditForm>
+        </div>
+    </div>
+</div>
+ 
+<!-- Modal para Eliminar ac proyecto -->
+<div class="modal fade" id="deleteAc_ProyectoModal" tabindex="-1" role="dialog" aria-labelledby="deleteAc_ProyectoModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteAc_ProyectoModalLabel">Eliminar Ac Proyecto</h5>
+                <!-- Título del modal para eliminar ac proyecto-->
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>¿Está seguro de que desea eliminar este ac proyecto?</p>
+                <p class="text-warning"><small>Esta acción no se puede deshacer.</small></p>
+                <!-- Mensaje de advertencia para la eliminación -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" @onclick="DeleteAc_Proyecto">Eliminar</button>
+                <!-- Botón para confirmar la eliminación del ac proyecto -->
+            </div>
+        </div>
+    </div>
+</div>
+ 
+<!-- Modal para Consultar ac proyecto -->
+<div class="modal fade" id="consultarAc_ProyectoModal" tabindex="-1" role="dialog" aria-labelledby="consultarAc_ProyectoModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="consultarAc_ProyectoModalLabel">Consultar Ac proyecto</h5>
+                <!-- Título del modal para consultar ac proyecto -->
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Campos para ingresar el código y mostrar la información del ac proyecto consultado-->
+                
+                <div class="form-group">
+                    <label>Proyecto</label>
+                    <input type="text" class="form-control" @bind="consultaProyecto"  />
+                    <!-- Campo para mostrar el ac proyecto consultado, es de solo lectura -->
+                </div>
+                <div class="form-group">
+                    <label>Area conocimiento</label>
+                    <input type="text" class="form-control" @bind="consultaArea_conocimiento" readonly />
+                    <!-- Campo para mostrar el el ac proyecto clave en ingles consultado, es de solo lectura -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" @onclick="ConsultarAc_proyecto">Consultar</button>
+                <!-- Botón para realizar la consulta del ac proyecto clave con el código ingresado -->
+                <button type="button" class="btn btn-warning" @onclick="ModificarAc_proyectoConsultado" disabled="@(!Ac_proyectoEncontrado)">Modificar</button>
+                <!-- Botón para modificar el ac proyecto consultado si fue encontrada -->
+                <button type="button" class="btn btn-danger" @onclick="EliminarAc_proyectoConsultado" disabled="@(!Ac_proyectoEncontrado)">Eliminar</button>
+                <!-- Botón para eliminarel ac proyecto consultado si fue encontrada -->
+            </div>
+        </div>
+    </div>
+</div>
+ 
+@code {
+   
+    private List<Dictionary<string, object>>Ac_Proyectos = new List<Dictionary<string, object>>();
+    // Lista que almacena los ac proyecto obtenidas desde la API
+   
+    private Dictionary<string, object> currentAc_Proyecto = new Dictionary<string, object>();
+    // Diccionario que representa el ac proyecto actual que se está añadiendo o editando
+ 
+    private bool isNewAc_Proyecto = true;
+    // Bandera que indica si se está añadiendo un nuevo ac proyecto editando uno existente
+ 
+    private bool Ac_proyectoEncontrado = false;
+    // Bandera que indica si un ac proyecto fue encontrado durante la consulta
+ 
+  
+ 
+    private string proyecto = "";
+    // Variable que almacena el termido de proyecto durante la edición o creación
+ 
+    private string area_conocimiento = "";
+    // Variable que almacena el area conocimiento clave durante la edición o creación
+ 
+
+ 
+    private string consultaProyecto = "";
+    // Variable que almacena el poryecto clave que se encontró durante la consulta
+  
+  
+    private string consultaArea_conocimiento = "";
+    // Variable que almacena el area conocimiento del termimo clave que se encontró durante la consulta
+ 
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadAc_proyectos();
+        // Método que se ejecuta al inicializar el componente. Carga la lista de ac proyecto desde la API.
+    }
+ 
+    private async Task LoadAc_proyectos()
+    {
+        try
+        {
+            Ac_Proyectos = await ApiService.GetDataAsync("api/proyecto/ac_proyecto");
+            // Llama a la API para obtener la lista de terminos clave y la almacena en la variable 'terminosclaves'.
+            StateHasChanged();
+            // Fuerza la actualización de la UI después de cargar los datos.
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al cargarac proyecto: {ex.Message}");
+            // Muestra un error en la consola si la carga de terminos claves falla.
+            await JSRuntime.InvokeVoidAsync("alert", "Error al cargar ac proyecto. Por favor, intente nuevamente.");
+            // Muestra una alerta en la página indicando que hubo un error al cargar los terminos claves.
+        }
+    }
+ 
+    private void PrepareForAddOrEdit(Dictionary<string, object>? Ac_Proyecto = null)
+    {
+        isNewAc_Proyecto = Ac_Proyecto == null;
+        // Si acproyecto' es null, significa que estamos añadiendo una nueva Termino_clave. De lo contrario, estamos editando.
+        currentAc_Proyecto = Ac_Proyecto ?? new Dictionary<string, object>();
+        // Si 'ac proyecto' es null, inicializamos un nuevo diccionario. De lo contrario, usamos el diccionario de la Termino_clave seleccionada.
+ 
+       
+        proyecto = currentAc_Proyecto.TryGetValue("proyecto", out var p) ? p?.ToString() ?? "" : "";
+       area_conocimiento = currentAc_Proyecto.TryGetValue("area_conocimiento", out var ac) ? ac?.ToString() ?? "" : "";
+        // Extrae los valores de 'proyecto' y 'area_conocimiento' de ac proyecto' y los asigna a las variables correspondientes.
+ 
+        JSRuntime.InvokeVoidAsync("showModal", "addAc_ProyectoModal");
+        // Muestra el modal para añadir o editar Termino_clave usando JavaScript.
+    }
+ 
+    private void PrepareForConsulta()
+    {
+        
+        consultaProyecto = "";
+        consultaArea_conocimiento = "";
+        Ac_proyectoEncontrado = false;
+        // Limpia los campos de consulta y establece 'Ac_proyectoEncontrado' en false.
+    }
+ 
+    private void SetAc_ProyectoToDelete(Dictionary<string, object> Ac_Proyecto)
+    {
+        currentAc_Proyecto = Ac_Proyecto;
+        // Establece la Termino_clave actual como la Termino_clave a eliminar.
+        JSRuntime.InvokeVoidAsync("showModal", "deleteAc_ProyectoModal");
+        // Muestra el modal para confirmar la eliminación usando JavaScript.
+ 
+ 
+    }
+      private async Task SaveAc_Proyecto()
+    {
+        try
+        {
+           
+            currentAc_Proyecto["proyecto"] = proyecto;
+            currentAc_Proyecto["area_conocimiento"] = area_conocimiento;
+            // Actualiza 'currentAc_Proyecto' con los valores actuales de los campos de entrada.
+ 
+            bool success;
+            if (isNewAc_Proyecto)
+            {
+                success = await ApiService.AddEntityAsync("api/proyecto/ac_proyecto", currentAc_Proyecto);
+                await LoadAc_proyectos();
+               
+                // Si estamos añadiendo una nueva Termino_clave, llama a la API para añadir la nueva Termino_clave.
+            }
+            else
+            {
+                success = await ApiService.EditEntityAsync("api/proyecto/ac_proyecto/proyecto", proyecto, currentAc_Proyecto);
+                await LoadAc_proyectos();
+                // Si estamos editando una Termino_clave existente, llama a la API para editarla.
+            }
+ 
+            if (success)
+            {
+ 
+                await JSRuntime.InvokeVoidAsync("hideModal", "addAc_proyectoModal");
+                // Si la operación tiene éxito, cierra el modal.
+ 
+                await LoadAc_proyectos();
+                // Recarga la lista de terminos claves para reflejar los cambios.
+ 
+                proyecto = area_conocimiento = string.Empty;
+                currentAc_Proyecto = new Dictionary<string, object>();
+                isNewAc_Proyecto = true;
+                // Limpia los campos del formulario y restablece el estado.
+ 
+                StateHasChanged();
+               
+                // Fuerza la actualización de la UI.
+               
+               await LoadAc_proyectos();
+ 
+                await JSRuntime.InvokeVoidAsync("alert", "Operación realizada con éxito1.");
+               
+               
+                // Muestra un mensaje de éxito al usuario.
+            }
+            else
+            {
+                await JSRuntime.InvokeVoidAsync("alert", "Error al guardar el ac proyecto. Por favor, intente nuevamente.");
+                // Si la operación falla, muestra un mensaje de error.
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al guardar el ac proyecto: {ex.Message}");
+            await JSRuntime.InvokeVoidAsync("alert", "Error al guardar el ac proyecto. Por favor, intente nuevamente.");
+            // Muestra un error en la consola y una alerta si hay una excepción durante el guardado.
+        }
+    }
+ 
+    private async Task DeleteAc_Proyecto()
+    {
+        try
+        {
+            if (currentAc_Proyecto.TryGetValue("proyecto", out var codigoObj) && codigoObj is string codigoStr)
+            {
+               
+                bool success = await ApiService.DeleteEntityAsync("api/proyecto/ac_proyecto/proyecto", codigoStr);
+                // Si se encuentra el código del termino clave actual, llama a la API para eliminarla.
+                if (success)
+                {
+                    await JSRuntime.InvokeVoidAsync("hideModal", "deleteAc_ProyectoModal");
+                    await LoadAc_proyectos();
+                    await JSRuntime.InvokeVoidAsync("alert", "Ac proyecto eliminado con éxito.");
+                    // Si la operación tiene éxito, cierra el modal, recarga la lista de terminos claves y muestra un mensaje de éxito.
+                }
+                else
+                {
+                   
+                    await JSRuntime.InvokeVoidAsync("alert", "Error al eliminar ac proyecto. Por favor, intente nuevamente.");
+                    // Si la operación falla, muestra un mensaje de error.
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al eliminar ac proyecto: {ex.Message}");
+            await JSRuntime.InvokeVoidAsync("alert", "Error al eliminar ac proyecto. Por favor, intente nuevamente.");
+            // Muestra un error en la consola y una alerta si hay una excepción durante la eliminación.
+        }
+    }
+ 
+    private async Task ConsultarAc_proyecto()
+    {
+        try
+        {
+            var resultado = await ApiService.GetDataAsync($"api/proyecto/ac_proyecto/proyecto/{consultaProyecto}");
+            if (resultado.Any())
+            {
+                var Ac_proyectoConsultado = resultado.First();
+                
+                consultaProyecto = Ac_proyectoConsultado["proyecto"]?.ToString() ?? "";
+                consultaArea_conocimiento = Ac_proyectoConsultado["area_conocimiento"]?.ToString() ?? "";
+                Ac_proyectoEncontrado = true;
+                // Si se encuentra un termino clave con el código consultado, muestra los datos en los campos correspondientes.
+            }
+            else
+            {
+                
+                consultaArea_conocimiento = "";
+                Ac_proyectoEncontrado = false;
+                await JSRuntime.InvokeVoidAsync("alert", "No se encontró ningun ac proyecto con ese nombre.");
+                // Si no se encuentra ninguna Termino_clave, limpia los campos y muestra un mensaje de alerta.
+            }
+            StateHasChanged();
+            // Fuerza la actualización de la UI para reflejar los cambios.
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al consultar ac proyecto: {ex.Message}");
+            await JSRuntime.InvokeVoidAsync("alert", "Error al consultar el ac proyecto. Por favor, intente nuevamente.");
+            // Muestra un error en la consola y una alerta si hay una excepción durante la consulta.
+        }
+    }
+ 
+    private async Task ModificarAc_proyectoConsultado()
+    {
+        PrepareForAddOrEdit(new Dictionary<string, object>
+        {
+           
+            ["Proyecto"] = consultaProyecto,
+            ["area_conocimiento"] = consultaArea_conocimiento
+        });
+        await JSRuntime.InvokeVoidAsync("hideModal", "consultarAc_ProyectoModal");
+        // Prepara los datos consultados para la edición y cierra el modal de consulta.
+    }
+ 
+    private async Task EliminarAc_proyectoConsultado()
+    {
+        SetAc_ProyectoToDelete(new Dictionary<string, object>
+        {
+            
+            ["proyecto"] = consultaProyecto,
+            ["area_conocimiento"] = consultaArea_conocimiento
+        });
+        await JSRuntime.InvokeVoidAsync("hideModal", "consultarAc_ProyectoModal");
+        // Prepara los datos consultados para la eliminación y cierra el modal de consulta.
+    }
+   
+}
+ 
