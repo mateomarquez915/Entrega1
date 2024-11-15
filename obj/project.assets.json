@@ -2064,11 +2064,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Mateo Marquez\\Desktop\\proyectosVSCODE\\BlazorFrontEnd\\BlazorFrontEnd.csproj",
+      "projectUniqueName": "C:\\Users\\Mateo Marquez\\Desktop\\Actualizar\\BlazorFrontEnd\\BlazorFrontEnd.csproj",
       "projectName": "BlazorFrontEnd",
-      "projectPath": "C:\\Users\\Mateo Marquez\\Desktop\\proyectosVSCODE\\BlazorFrontEnd\\BlazorFrontEnd.csproj",
+      "projectPath": "C:\\Users\\Mateo Marquez\\Desktop\\Actualizar\\BlazorFrontEnd\\BlazorFrontEnd.csproj",
       "packagesPath": "C:\\Users\\Mateo Marquez\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Mateo Marquez\\Desktop\\proyectosVSCODE\\BlazorFrontEnd\\obj\\",
+      "outputPath": "C:\\Users\\Mateo Marquez\\Desktop\\Actualizar\\BlazorFrontEnd\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Mateo Marquez\\AppData\\Roaming\\NuGet\\NuGet.Config"

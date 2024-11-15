@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "G+Iki7hwKsc=",
+  "dgSpecHash": "weKZ/ZCUnCU=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Mateo Marquez\\Desktop\\proyectosVSCODE\\BlazorFrontEnd\\BlazorFrontEnd.csproj",
+  "projectFilePath": "C:\\Users\\Mateo Marquez\\Desktop\\Actualizar\\BlazorFrontEnd\\BlazorFrontEnd.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Mateo Marquez\\.nuget\\packages\\microsoft.aspnetcore.authorization\\8.0.8\\microsoft.aspnetcore.authorization.8.0.8.nupkg.sha512",
     "C:\\Users\\Mateo Marquez\\.nuget\\packages\\microsoft.aspnetcore.components\\8.0.8\\microsoft.aspnetcore.components.8.0.8.nupkg.sha512",

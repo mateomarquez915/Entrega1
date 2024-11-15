@@ -284,7 +284,7 @@ este componente Blazor se carga y se representa en la página.
         descripcion = currentDesarrolla.TryGetValue("descripcion", out var de) ? de?.ToString() ?? "" : "";
         // Extrae los valores de 'docente', 'proyecto', 'rol' y 'descripcion' de 'currentDesarrolla' y los asigna a las variables correspondientes.
  
-        JSRuntime.InvokeVoidAsync("showModal", "addDesarrollaModal");
+        //JSRuntime.InvokeVoidAsync("showModal", "addDesarrollaModal");
         // Muestra el modal para añadir o editar persona usando JavaScript.
     }
  

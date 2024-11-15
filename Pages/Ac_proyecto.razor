@@ -11,10 +11,12 @@ este componente Blazor se carga y se representa en la página.
 <!--
 // Inyecta una instancia del servicio ApiService. Esto permite que el componente llame a la API a través de este servicio.
 -->
-@inject IJSRuntime JSRuntime
+@inject IJSRuntime ServicioJS
 <!--
 // Inyecta IJSRuntime, que es un servicio Blazor para ejecutar JavaScript desde C#.
 -->
+@inherits ValidacionAcceso
+
 <div class="container-xl">
     <div class="table-responsive">
         <div class="table-wrapper">
@@ -251,7 +253,7 @@ este componente Blazor se carga y se representa en la página.
        area_conocimiento = currentAc_Proyecto.TryGetValue("area_conocimiento", out var ac) ? ac?.ToString() ?? "" : "";
         // Extrae los valores de 'proyecto' y 'area_conocimiento' de ac proyecto' y los asigna a las variables correspondientes.
  
-        JSRuntime.InvokeVoidAsync("showModal", "addAc_ProyectoModal");
+        //JSRuntime.InvokeVoidAsync("showModal", "addAc_ProyectoModal");
         // Muestra el modal para añadir o editar Termino_clave usando JavaScript.
     }
  
@@ -426,4 +428,3 @@ este componente Blazor se carga y se representa en la página.
     }
    
 }
- 

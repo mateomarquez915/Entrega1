@@ -177,7 +177,7 @@ currentLineaInvestigacion = linea ?? new Dictionary<string, object>();
 nombre = currentLineaInvestigacion.TryGetValue("nombre", out var n) ? n?.ToString() ?? "" : "";
 descripcion = currentLineaInvestigacion.TryGetValue("descripcion", out var d) ? d?.ToString() ?? "" : "";
 
-JSRuntime.InvokeVoidAsync("showModal", "addLineaInvestigacionModal");
+//JSRuntime.InvokeVoidAsync("showModal", "addLineaInvestigacionModal");
 }
 
 private void PrepareForConsulta()

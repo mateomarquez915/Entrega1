@@ -8,10 +8,11 @@
 <!--
 // Inyecta una instancia del servicio ApiService. Esto permite que el componente llame a la API a través de este servicio.
 -->
-@inject IJSRuntime JSRuntime
+@inject IJSRuntime ServicioJS
 <!--
 // Inyecta IJSRuntime, que es un servicio Blazor para ejecutar JavaScript desde C#.
 -->
+@inherits ValidacionAcceso
 
 <div class="container-xl">
     <div class="table-responsive">
@@ -375,7 +376,7 @@
         fecha_fin = currentProyecto.TryGetValue("fecha_fin", out var ff) ? ff?.ToString() ?? "" : "";
         // Extrae y asigna los valores de 'currentProyecto'
 
-        JSRuntime.InvokeVoidAsync("showModal", "addProyectoModal");
+        //JSRuntime.InvokeVoidAsync("showModal", "addProyectoModal");
     }
 
     private void PrepareForConsulta()
@@ -512,7 +513,7 @@
             ["id"] = consultaid,
             ["titulo"] = consultaTitulo,
             ["resumen"] = consultaResumen,
-            ["telefono"] = consultaPresupuesto,
+            ["presupuesto"] = consultaPresupuesto,
             ["tipo_financiacion"] = consultaTipo_financiacion,
             ["tipo_fondos"] = consultaTipo_fondos,
             ["fecha_inicio"] = consultaFecha_inicio,

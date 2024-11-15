@@ -251,7 +251,7 @@ este componente Blazor se carga y se representa en la página.
         termino_ingles = currentTermino_clave.TryGetValue("termino_ingles", out var ti) ? ti?.ToString() ?? "" : "";
         // Extrae los valores de 'codigo', 'termino' y 'termino en ingles' de Termino_clave' y los asigna a las variables correspondientes.
  
-        JSRuntime.InvokeVoidAsync("showModal", "addTermino_claveModal");
+        //JSRuntime.InvokeVoidAsync("showModal", "addTermino_claveModal");
         // Muestra el modal para añadir o editar Termino_clave usando JavaScript.
     }
  

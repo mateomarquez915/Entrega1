@@ -1,0 +1,326 @@
+@page "/rol"
+@using BlazorFrontEnd.Services
+@inject ApiService ServicioApi
+@inject IJSRuntime ServicioJS
+
+@inherits ValidacionAcceso
+
+<div class="container-xl">
+    <div class="table-responsive">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h2>Gestionar <b>Roles</b></h2>
+                    </div>
+                    <div class="col-sm-6">
+                        <a href="#modalAgregarRol" class="btn btn-success" data-bs-toggle="modal" @onclick="() => PrepararParaAgregarOEditar()">
+                            <i class="material-icons">&#xE147;</i> <span>Añadir Nuevo Rol</span>
+                        </a>
+                        <a href="#modalConsultarRol" class="btn btn-success" data-bs-toggle="modal" @onclick="PrepararParaConsulta">
+                            <i class="material-icons">&#xE8B6;</i> <span>Consultar Rol</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            @if (roles == null)
+            {
+                <p>Cargando...</p>
+            }
+            else if (!roles.Any())
+            {
+                <p>No hay roles registrados.</p>
+            }
+            else
+            {
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var rol in roles)
+                        {
+                            <tr>
+                                <td>@rol["id"]</td>
+                                <td>@rol["nombre"]</td>
+                                <td>
+                                    <a href="#modalAgregarRol" class="edit" data-bs-toggle="modal" @onclick="() => PrepararParaEditar(rol)">
+                                        <i class="material-icons" data-bs-toggle="tooltip" title="Editar">&#xE254;</i>
+                                    </a>
+                                    <a href="#modalEliminarRol" class="delete" data-bs-toggle="modal" @onclick="() => AsignarRolParaEliminar(rol)">
+                                        <i class="material-icons" data-bs-toggle="tooltip" title="Eliminar">&#xE872;</i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Añadir/Editar Rol -->
+<div class="modal fade" id="modalAgregarRol" tabindex="-1" role="dialog" aria-labelledby="modalAgregarRolLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <EditForm Model="@rolActual" OnValidSubmit="GuardarRol">
+                <DataAnnotationsValidator />
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalAgregarRolLabel">@(esNuevoRol ? "Añadir" : "Editar") Rol</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>ID</label>
+                        <InputText class="form-control" @bind-Value="id" />
+                        <ValidationMessage For="@(() => id)" />
+                    </div>
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <InputText class="form-control" @bind-Value="nombre" />
+                        <ValidationMessage For="@(() => nombre)" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">@(esNuevoRol ? "Añadir" : "Guardar")</button>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Eliminar Rol -->
+<div class="modal fade" id="modalEliminarRol" tabindex="-1" role="dialog" aria-labelledby="modalEliminarRolLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalEliminarRolLabel">Eliminar Rol</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>¿Está seguro de que desea eliminar este rol?</p>
+                <p class="text-warning"><small>Esta acción no se puede deshacer.</small></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" @onclick="EliminarRol">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Consultar Rol -->
+<div class="modal fade" id="modalConsultarRol" tabindex="-1" role="dialog" aria-labelledby="modalConsultarRolLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalConsultarRolLabel">Consultar Rol</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>ID</label>
+                    <input type="text" class="form-control" @bind="consultaId" @bind:event="oninput" />
+                </div>
+                <div class="form-group">
+                    <label>Nombre</label>
+                    <input type="text" class="form-control" @bind="consultaNombre" readonly />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" @onclick="ConsultarRol">Consultar</button>
+                <button type="button" class="btn btn-warning" @onclick="ModificarRolConsultado" disabled="@(!rolEncontrado)">Modificar</button>
+                <button type="button" class="btn btn-danger" @onclick="EliminarRolConsultado" disabled="@(!rolEncontrado)">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private List<Dictionary<string, object>> roles = new List<Dictionary<string, object>>();
+    private Dictionary<string, object> rolActual = new Dictionary<string, object>();
+    private bool esNuevoRol = true;
+    private bool rolEncontrado = false;
+    private string id = "";
+    private string nombre = "";
+    private string consultaId = "";
+    private string consultaNombre = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CargarRoles();
+    }
+
+    private async Task CargarRoles()
+    {
+        try
+        {
+            roles = await ServicioApi.GetDataAsync("api/proyecto/rol");
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al cargar roles: {ex.Message}");
+            await ServicioJS.InvokeVoidAsync("alert", "Error al cargar roles. Por favor, intente nuevamente.");
+        }
+    }
+
+    private void PrepararParaAgregarOEditar(Dictionary<string, object>? rol = null)
+    {
+        esNuevoRol = rol == null;
+        rolActual = rol ?? new Dictionary<string, object>();
+
+        id = rolActual.TryGetValue("id", out var i) ? i?.ToString() ?? "" : "";
+        nombre = rolActual.TryGetValue("nombre", out var n) ? n?.ToString() ?? "" : "";
+
+        if(esNuevoRol) {
+            ServicioJS.InvokeVoidAsync("hideModal", "modalAgregarRol");
+        } else {
+            ServicioJS.InvokeVoidAsync("showModal", "modalAgregarRol");
+        }
+    }
+
+    private void PrepararParaEditar(Dictionary<string, object>? rol = null)
+    {
+        esNuevoRol = rol == null;
+        rolActual = rol ?? new Dictionary<string, object>();
+
+        id = rolActual.TryGetValue("id", out var i) ? i?.ToString() ?? "" : "";
+        nombre = rolActual.TryGetValue("nombre", out var n) ? n?.ToString() ?? "" : "";
+        
+        ServicioJS.InvokeVoidAsync("hideModal", "modalAgregarRol");
+    }
+
+    private void PrepararParaConsulta()
+    {
+        consultaId = "";
+        consultaNombre = "";
+        rolEncontrado = false;
+    }
+
+    private void AsignarRolParaEliminar(Dictionary<string, object> rol)
+    {
+        rolActual = rol;
+        Console.WriteLine($"Rol seleccionado para eliminar: ID: {rolActual["id"]}, Nombre: {rolActual["nombre"]}");
+        
+        ServicioJS.InvokeVoidAsync("showModal", "modalEliminarRol");
+    }
+
+    private async Task GuardarRol()
+    {
+        try
+        {
+            rolActual["id"] = id;
+            rolActual["nombre"] = nombre;
+
+            bool exito;
+            if (esNuevoRol)
+            {
+                exito = await ServicioApi.AddEntityAsync("api/proyecto/rol", rolActual);
+            }
+            else
+            {
+                exito = await ServicioApi.EditEntityAsync("api/proyecto/rol/id", id, rolActual);
+            }
+
+            if (exito)
+            {
+                await ServicioJS.InvokeVoidAsync("hideModal", "modalAgregarRol");
+                await CargarRoles();
+                id = nombre = string.Empty;
+                rolActual = new Dictionary<string, object>();
+                esNuevoRol = true;
+                StateHasChanged();
+                await ServicioJS.InvokeVoidAsync("alert", "Operación realizada con éxito.");
+            }
+            else
+            {
+                await ServicioJS.InvokeVoidAsync("alert", "Error al guardar el rol. Por favor, intente nuevamente.");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al guardar rol: {ex.Message}");
+            await ServicioJS.InvokeVoidAsync("alert", "Error al guardar el rol. Por favor, intente nuevamente.");
+        }
+    }
+
+    private async Task EliminarRol()
+    {
+        try
+        {
+            if (rolActual.TryGetValue("id", out var idObj) && idObj is string idStr)
+            {
+                bool exito = await ServicioApi.DeleteEntityAsync("api/proyecto/rol/id", idStr);
+                if (exito)
+                {
+                    await ServicioJS.InvokeVoidAsync("hideModal", "modalEliminarRol");
+                    await CargarRoles();
+                    await ServicioJS.InvokeVoidAsync("alert", "Rol eliminado con éxito.");
+                }
+                else
+                {
+                    await ServicioJS.InvokeVoidAsync("alert", "Error al eliminar el rol. Por favor, intente nuevamente.");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al eliminar rol: {ex.Message}");
+            await ServicioJS.InvokeVoidAsync("alert", "Error al eliminar el rol. Por favor, intente nuevamente.");
+        }
+    }
+
+    private async Task ConsultarRol()
+    {
+        try
+        {
+            var resultado = await ServicioApi.GetDataAsync($"api/proyecto/rol/id/{consultaId}");
+            if (resultado.Any())
+            {
+                var rolConsultado = resultado.First();
+                consultaNombre = rolConsultado["nombre"]?.ToString() ?? "";
+                rolEncontrado = true;
+            }
+            else
+            {
+                consultaNombre = "";
+                rolEncontrado = false;
+                await ServicioJS.InvokeVoidAsync("alert", "No se encontró ningún rol con ese ID.");
+            }
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al consultar rol: {ex.Message}");
+            await ServicioJS.InvokeVoidAsync("alert", "Error al consultar el rol. Por favor, intente nuevamente.");
+        }
+    }
+
+    private async Task ModificarRolConsultado()
+    {
+        PrepararParaAgregarOEditar(new Dictionary<string, object>
+        {
+            ["id"] = consultaId,
+            ["nombre"] = consultaNombre
+        });
+        await ServicioJS.InvokeVoidAsync("hideModal", "modalConsultarRol");
+    }
+
+    private async Task EliminarRolConsultado()
+    {
+        AsignarRolParaEliminar(new Dictionary<string, object>
+        {
+            ["id"] = consultaId,
+            ["nombre"] = consultaNombre
+        });
+        await ServicioJS.InvokeVoidAsync("hideModal", "modalConsultarRol");
+    }
+}
