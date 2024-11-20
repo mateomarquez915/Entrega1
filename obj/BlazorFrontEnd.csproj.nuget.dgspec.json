@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Mateo Marquez\\Desktop\\Actualizar\\BlazorFrontEnd\\BlazorFrontEnd.csproj": {}
+    "C:\\Users\\dhzea\\Desktop\\Desarrollo de Software\\Entrega actualizada\\Entrega1\\BlazorFrontEnd.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Mateo Marquez\\Desktop\\Actualizar\\BlazorFrontEnd\\BlazorFrontEnd.csproj": {
+    "C:\\Users\\dhzea\\Desktop\\Desarrollo de Software\\Entrega actualizada\\Entrega1\\BlazorFrontEnd.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Mateo Marquez\\Desktop\\Actualizar\\BlazorFrontEnd\\BlazorFrontEnd.csproj",
+        "projectUniqueName": "C:\\Users\\dhzea\\Desktop\\Desarrollo de Software\\Entrega actualizada\\Entrega1\\BlazorFrontEnd.csproj",
         "projectName": "BlazorFrontEnd",
-        "projectPath": "C:\\Users\\Mateo Marquez\\Desktop\\Actualizar\\BlazorFrontEnd\\BlazorFrontEnd.csproj",
-        "packagesPath": "C:\\Users\\Mateo Marquez\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Mateo Marquez\\Desktop\\Actualizar\\BlazorFrontEnd\\obj\\",
+        "projectPath": "C:\\Users\\dhzea\\Desktop\\Desarrollo de Software\\Entrega actualizada\\Entrega1\\BlazorFrontEnd.csproj",
+        "packagesPath": "C:\\Users\\dhzea\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\dhzea\\Desktop\\Desarrollo de Software\\Entrega actualizada\\Entrega1\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Mateo Marquez\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\dhzea\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -55,13 +55,13 @@
             "Microsoft.NET.ILLink.Tasks": {
               "suppressParent": "All",
               "target": "Package",
-              "version": "[8.0.8, )",
+              "version": "[8.0.10, )",
               "autoReferenced": true
             },
             "Microsoft.NET.Sdk.WebAssembly.Pack": {
               "suppressParent": "All",
               "target": "Package",
-              "version": "[8.0.8, )",
+              "version": "[8.0.10, )",
               "autoReferenced": true
             }
           },
@@ -79,7 +79,7 @@
           "downloadDependencies": [
             {
               "name": "Microsoft.NETCore.App.Runtime.Mono.browser-wasm",
-              "version": "[8.0.8, 8.0.8]"
+              "version": "[8.0.10, 8.0.10]"
             }
           ],
           "frameworkReferences": {
@@ -87,7 +87,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.401/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.403/PortableRuntimeIdentifierGraph.json"
         }
       },
       "runtimes": {

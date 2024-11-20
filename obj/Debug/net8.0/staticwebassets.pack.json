@@ -1,47 +1,47 @@
 {
   "Files": [
     {
-      "Id": "C:\\Users\\Mateo Marquez\\Desktop\\Actualizar\\BlazorFrontEnd\\bin\\Debug\\net8.0\\wwwroot\\_framework\\blazor.webassembly.js",
+      "Id": "C:\\Users\\dhzea\\Desktop\\Desarrollo de Software\\Entrega actualizada\\Entrega1\\bin\\Debug\\net8.0\\wwwroot\\_framework\\blazor.webassembly.js",
       "PackagePath": "staticwebassets\\_framework\\blazor.webassembly.js"
     },
     {
-      "Id": "C:\\Users\\Mateo Marquez\\Desktop\\Actualizar\\BlazorFrontEnd\\obj\\Debug\\net8.0\\compressed\\umx5mt9hap.gz",
+      "Id": "C:\\Users\\dhzea\\Desktop\\Desarrollo de Software\\Entrega actualizada\\Entrega1\\obj\\Debug\\net8.0\\compressed\\g8j60sw3qv.gz",
       "PackagePath": "staticwebassets\\_framework\\blazor.webassembly.js.gz"
     },
     {
-      "Id": "C:\\Users\\Mateo Marquez\\Desktop\\Actualizar\\BlazorFrontEnd\\obj\\Debug\\net8.0\\scopedcss\\bundle\\BlazorFrontEnd.styles.css",
+      "Id": "C:\\Users\\dhzea\\Desktop\\Desarrollo de Software\\Entrega actualizada\\Entrega1\\obj\\Debug\\net8.0\\scopedcss\\bundle\\BlazorFrontEnd.styles.css",
       "PackagePath": "staticwebassets\\BlazorFrontEnd.styles.css"
     },
     {
-      "Id": "C:\\Users\\Mateo Marquez\\Desktop\\Actualizar\\BlazorFrontEnd\\wwwroot\\css\\app.css",
+      "Id": "C:\\Users\\dhzea\\Desktop\\Desarrollo de Software\\Entrega actualizada\\Entrega1\\wwwroot\\css\\app.css",
       "PackagePath": "staticwebassets\\css\\app.css"
     },
     {
-      "Id": "C:\\Users\\Mateo Marquez\\Desktop\\Actualizar\\BlazorFrontEnd\\wwwroot\\css\\bootstrap\\bootstrap.min.css",
+      "Id": "C:\\Users\\dhzea\\Desktop\\Desarrollo de Software\\Entrega actualizada\\Entrega1\\wwwroot\\css\\bootstrap\\bootstrap.min.css",
       "PackagePath": "staticwebassets\\css\\bootstrap\\bootstrap.min.css"
     },
     {
-      "Id": "C:\\Users\\Mateo Marquez\\Desktop\\Actualizar\\BlazorFrontEnd\\wwwroot\\css\\bootstrap\\bootstrap.min.css.map",
+      "Id": "C:\\Users\\dhzea\\Desktop\\Desarrollo de Software\\Entrega actualizada\\Entrega1\\wwwroot\\css\\bootstrap\\bootstrap.min.css.map",
       "PackagePath": "staticwebassets\\css\\bootstrap\\bootstrap.min.css.map"
     },
     {
-      "Id": "C:\\Users\\Mateo Marquez\\Desktop\\Actualizar\\BlazorFrontEnd\\wwwroot\\css\\crud-styles.css",
+      "Id": "C:\\Users\\dhzea\\Desktop\\Desarrollo de Software\\Entrega actualizada\\Entrega1\\wwwroot\\css\\crud-styles.css",
       "PackagePath": "staticwebassets\\css\\crud-styles.css"
     },
     {
-      "Id": "C:\\Users\\Mateo Marquez\\Desktop\\Actualizar\\BlazorFrontEnd\\wwwroot\\favicon.png",
+      "Id": "C:\\Users\\dhzea\\Desktop\\Desarrollo de Software\\Entrega actualizada\\Entrega1\\wwwroot\\favicon.png",
       "PackagePath": "staticwebassets\\favicon.png"
     },
     {
-      "Id": "C:\\Users\\Mateo Marquez\\Desktop\\Actualizar\\BlazorFrontEnd\\wwwroot\\icon-192.png",
+      "Id": "C:\\Users\\dhzea\\Desktop\\Desarrollo de Software\\Entrega actualizada\\Entrega1\\wwwroot\\icon-192.png",
       "PackagePath": "staticwebassets\\icon-192.png"
     },
     {
-      "Id": "C:\\Users\\Mateo Marquez\\Desktop\\Actualizar\\BlazorFrontEnd\\wwwroot\\index.html",
+      "Id": "C:\\Users\\dhzea\\Desktop\\Desarrollo de Software\\Entrega actualizada\\Entrega1\\wwwroot\\index.html",
       "PackagePath": "staticwebassets\\index.html"
     },
     {
-      "Id": "C:\\Users\\Mateo Marquez\\Desktop\\Actualizar\\BlazorFrontEnd\\wwwroot\\sample-data\\weather.json",
+      "Id": "C:\\Users\\dhzea\\Desktop\\Desarrollo de Software\\Entrega actualizada\\Entrega1\\wwwroot\\sample-data\\weather.json",
       "PackagePath": "staticwebassets\\sample-data\\weather.json"
     },
     {
