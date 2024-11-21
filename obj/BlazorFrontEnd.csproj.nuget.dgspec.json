@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\dhzea\\Desktop\\Desarrollo de Software\\Entrega actualizada\\Entrega1\\BlazorFrontEnd.csproj": {}
+    "C:\\Users\\dhzea\\Desktop\\entrega\\Entrega1\\BlazorFrontEnd.csproj": {}
   },
   "projects": {
-    "C:\\Users\\dhzea\\Desktop\\Desarrollo de Software\\Entrega actualizada\\Entrega1\\BlazorFrontEnd.csproj": {
+    "C:\\Users\\dhzea\\Desktop\\entrega\\Entrega1\\BlazorFrontEnd.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\dhzea\\Desktop\\Desarrollo de Software\\Entrega actualizada\\Entrega1\\BlazorFrontEnd.csproj",
+        "projectUniqueName": "C:\\Users\\dhzea\\Desktop\\entrega\\Entrega1\\BlazorFrontEnd.csproj",
         "projectName": "BlazorFrontEnd",
-        "projectPath": "C:\\Users\\dhzea\\Desktop\\Desarrollo de Software\\Entrega actualizada\\Entrega1\\BlazorFrontEnd.csproj",
+        "projectPath": "C:\\Users\\dhzea\\Desktop\\entrega\\Entrega1\\BlazorFrontEnd.csproj",
         "packagesPath": "C:\\Users\\dhzea\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\dhzea\\Desktop\\Desarrollo de Software\\Entrega actualizada\\Entrega1\\obj\\",
+        "outputPath": "C:\\Users\\dhzea\\Desktop\\entrega\\Entrega1\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\dhzea\\AppData\\Roaming\\NuGet\\NuGet.Config"
