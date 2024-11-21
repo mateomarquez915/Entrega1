@@ -26,20 +26,28 @@ build_property._RazorSourceGeneratorDebug =
 build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Mateo Marquez/Desktop/Actualizar/BlazorFrontEnd/Pages/Aa_proyecto.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWFfcHJveWVjdG8ucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Mateo Marquez/Desktop/Actualizar/BlazorFrontEnd/Pages/Ac_proyecto.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWNfcHJveWVjdG8ucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Mateo Marquez/Desktop/Actualizar/BlazorFrontEnd/Pages/Aliado_proyecto.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWxpYWRvX3Byb3llY3RvLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Mateo Marquez/Desktop/Actualizar/BlazorFrontEnd/Pages/Area_conocimiento.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXJlYV9jb25vY2ltaWVudG8ucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Mateo Marquez/Desktop/Actualizar/BlazorFrontEnd/Pages/Cliente.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ2xpZW50ZS5yYXpvcg==
-build_metadata.AdditionalFiles.CssScope = 
-
 [C:/Users/Mateo Marquez/Desktop/Actualizar/BlazorFrontEnd/Pages/Desarrolla.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRGVzYXJyb2xsYS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Mateo Marquez/Desktop/Actualizar/BlazorFrontEnd/Pages/Docente_producto.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRG9jZW50ZV9wcm9kdWN0by5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Mateo Marquez/Desktop/Actualizar/BlazorFrontEnd/Pages/Home.razor]
@@ -58,6 +66,14 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTG9nb3V0LnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Mateo Marquez/Desktop/Actualizar/BlazorFrontEnd/Pages/Ods_proyecto.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcT2RzX3Byb3llY3RvLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Mateo Marquez/Desktop/Actualizar/BlazorFrontEnd/Pages/Palabras_clave.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGFsYWJyYXNfY2xhdmUucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Mateo Marquez/Desktop/Actualizar/BlazorFrontEnd/Pages/Producto.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJvZHVjdG8ucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
@@ -68,10 +84,6 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/Mateo Marquez/Desktop/Actualizar/BlazorFrontEnd/Pages/Proyecto_linea.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJveWVjdG9fbGluZWEucmF6b3I=
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/Mateo Marquez/Desktop/Actualizar/BlazorFrontEnd/Pages/Prueba1.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJ1ZWJhMS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Mateo Marquez/Desktop/Actualizar/BlazorFrontEnd/Pages/PruebaRolesYRutas.razor]

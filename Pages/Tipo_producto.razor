@@ -11,12 +11,11 @@ este componente Blazor se carga y se representa en la página.
 <!--
 // Inyecta una instancia del servicio ApiService. Esto permite que el componente llame a la API a través de este servicio.
 -->
-@inject IJSRuntime JSRuntime
+@inject IJSRuntime ServicioJS
 <!--
 // Inyecta IJSRuntime, que es un servicio Blazor para ejecutar JavaScript desde C#.
 -->
-
-
+@inherits ValidacionAcceso
 
 <div class="container-xl">
     <div class="table-responsive">

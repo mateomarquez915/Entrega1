@@ -1,33 +1,91 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">BlazorFrontEnd</a>
-        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-    </div>
-</div>
-
-<div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
-            </NavLink>
+﻿<div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
+    <nav class="flex-column d-flex h-100">
+        <div class="nav-items-container flex-grow-1">
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                    <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
+                </NavLink>
+            </div>
+            
+             <div class="nav-item px-3">
+                <NavLink class="nav-link" href="aa_proyecto">
+                    <span class="bi bi-list-rocket-nav-menu" aria-hidden="true"></span> Aa proyecto 
+                </NavLink>
+            </div>
+             <div class="nav-item px-3">
+                <NavLink class="nav-link" href="ac_proyecto">
+                    <span class="bi bi-list-rocket-nav-menu" aria-hidden="true"></span> Ac proyecto 
+                </NavLink>
+            </div>
+             <div class="nav-item px-3">
+                <NavLink class="nav-link" href="aliado_proyecto">
+                    <span class="bi bi-list-rocket-nav-menu" aria-hidden="true"></span> Aliado proyecto 
+                </NavLink>
+            </div>
+             <div class="nav-item px-3">
+                <NavLink class="nav-link" href="area_conocimiento">
+                    <span class="bi bi-list-rocket-nav-menu" aria-hidden="true"></span> Area Conocimiento
+                </NavLink>
+            </div>
+             <div class="nav-item px-3">
+                <NavLink class="nav-link" href="desarrolla">
+                    <span class="bi bi-list-rocket-nav-menu" aria-hidden="true"></span> Desarrolla
+                </NavLink>
+            </div>
+             <div class="nav-item px-3">
+                <NavLink class="nav-link" href="docente_producto">
+                    <span class="bi bi-list-rocket-nav-menu" aria-hidden="true"></span> Docente producto
+                </NavLink>
+            </div>
+             <div class="nav-item px-3">
+                <NavLink class="nav-link" href="ods_proyecto">
+                    <span class="bi bi-list-rocket-nav-menu" aria-hidden="true"></span> Ods proyecto
+                </NavLink>
+            </div>
+             <div class="nav-item px-3">
+                <NavLink class="nav-link" href="palabras_clave">
+                    <span class="bi bi-list-rocket-nav-menu" aria-hidden="true"></span> Palabras clave
+                </NavLink>
+            </div>
+             <div class="nav-item px-3">
+                <NavLink class="nav-link" href="producto">
+                    <span class="bi bi-list-rocket-nav-menu" aria-hidden="true"></span> Producto 
+                </NavLink>
+            </div>
+             <div class="nav-item px-3">
+                <NavLink class="nav-link" href="proyecto_linea">
+                    <span class="bi bi-list-rocket-nav-menu" aria-hidden="true"></span> Proyecto linea 
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="tipo_producto">
+                    <span class="bi bi-list-book-nav-menu" aria-hidden="true"></span> Tipo Producto
+                </NavLink>
+            </div>
+             <div class="nav-item px-3">
+                <NavLink class="nav-link" href="termino_clave">
+                    <span class="bi bi-list-book-nav-menu" aria-hidden="true"></span> Termino clave
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="proyecto">
+                    <span class="bi bi-list-book-nav-menu" aria-hidden="true"></span> Proyecto
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="rol">
+                    <span class="bi bi-list-book-nav-menu" aria-hidden="true"></span> Roles
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="prueba-roles-rutas">
+                    <span class="bi bi-list-book-nav-menu" aria-hidden="true"></span> Rutas
+                </NavLink>
+            </div>
         </div>
-
-         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="proyecto">
-                <span class="bi bi-list-rocket-nav-menu" aria-hidden="true"></span> Proyecto
-            </NavLink>
-        </div>
-         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="tipo_producto">
-                <span class="bi bi-list-book-nav-menu" aria-hidden="true"></span> Tipo Producto
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="producto">
-                <span class="bi bi-list-book-nav-menu" aria-hidden="true"></span> Producto
+        <div class="nav-item px-3 logout-container mt-auto">
+            <NavLink class="nav-link" href="logout">
+                <span class="bi bi-list-book-nav-menu" aria-hidden="true"></span> Logout
             </NavLink>
         </div>
     </nav>
