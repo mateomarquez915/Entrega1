@@ -13,103 +13,103 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = browser
 build_property.RootNamespace = BlazorFrontEnd
 build_property.RootNamespace = BlazorFrontEnd
-build_property.ProjectDir = C:\Users\Mateo Marquez\Desktop\Actualizar\BlazorFrontEnd\
+build_property.ProjectDir = C:\Users\dhzea\Desktop\entrega\Entrega1\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = false
 build_property.RazorLangVersion = 8.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\Mateo Marquez\Desktop\Actualizar\BlazorFrontEnd
+build_property.MSBuildProjectDirectory = C:\Users\dhzea\Desktop\entrega\Entrega1
 build_property._RazorSourceGeneratorDebug = 
 
-[C:/Users/Mateo Marquez/Desktop/Actualizar/BlazorFrontEnd/App.razor]
+[C:/Users/dhzea/Desktop/entrega/Entrega1/App.razor]
 build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Mateo Marquez/Desktop/Actualizar/BlazorFrontEnd/Pages/Aa_proyecto.razor]
+[C:/Users/dhzea/Desktop/entrega/Entrega1/Pages/Aa_proyecto.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWFfcHJveWVjdG8ucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Mateo Marquez/Desktop/Actualizar/BlazorFrontEnd/Pages/Ac_proyecto.razor]
+[C:/Users/dhzea/Desktop/entrega/Entrega1/Pages/Ac_proyecto.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWNfcHJveWVjdG8ucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Mateo Marquez/Desktop/Actualizar/BlazorFrontEnd/Pages/Aliado_proyecto.razor]
+[C:/Users/dhzea/Desktop/entrega/Entrega1/Pages/Aliado_proyecto.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWxpYWRvX3Byb3llY3RvLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Mateo Marquez/Desktop/Actualizar/BlazorFrontEnd/Pages/Area_conocimiento.razor]
+[C:/Users/dhzea/Desktop/entrega/Entrega1/Pages/Area_conocimiento.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXJlYV9jb25vY2ltaWVudG8ucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Mateo Marquez/Desktop/Actualizar/BlazorFrontEnd/Pages/Desarrolla.razor]
+[C:/Users/dhzea/Desktop/entrega/Entrega1/Pages/Desarrolla.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRGVzYXJyb2xsYS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Mateo Marquez/Desktop/Actualizar/BlazorFrontEnd/Pages/Docente_producto.razor]
+[C:/Users/dhzea/Desktop/entrega/Entrega1/Pages/Docente_producto.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRG9jZW50ZV9wcm9kdWN0by5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Mateo Marquez/Desktop/Actualizar/BlazorFrontEnd/Pages/Home.razor]
+[C:/Users/dhzea/Desktop/entrega/Entrega1/Pages/Home.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSG9tZS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Mateo Marquez/Desktop/Actualizar/BlazorFrontEnd/Pages/LineaInvestigacion.Razor]
+[C:/Users/dhzea/Desktop/entrega/Entrega1/Pages/LineaInvestigacion.Razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTGluZWFJbnZlc3RpZ2FjaW9uLlJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Mateo Marquez/Desktop/Actualizar/BlazorFrontEnd/Pages/Login.razor]
+[C:/Users/dhzea/Desktop/entrega/Entrega1/Pages/Login.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTG9naW4ucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Mateo Marquez/Desktop/Actualizar/BlazorFrontEnd/Pages/Logout.razor]
+[C:/Users/dhzea/Desktop/entrega/Entrega1/Pages/Logout.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTG9nb3V0LnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Mateo Marquez/Desktop/Actualizar/BlazorFrontEnd/Pages/Ods_proyecto.razor]
+[C:/Users/dhzea/Desktop/entrega/Entrega1/Pages/Ods_proyecto.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcT2RzX3Byb3llY3RvLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Mateo Marquez/Desktop/Actualizar/BlazorFrontEnd/Pages/Palabras_clave.razor]
+[C:/Users/dhzea/Desktop/entrega/Entrega1/Pages/Palabras_clave.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGFsYWJyYXNfY2xhdmUucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Mateo Marquez/Desktop/Actualizar/BlazorFrontEnd/Pages/Producto.razor]
+[C:/Users/dhzea/Desktop/entrega/Entrega1/Pages/Producto.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJvZHVjdG8ucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Mateo Marquez/Desktop/Actualizar/BlazorFrontEnd/Pages/Proyecto.razor]
+[C:/Users/dhzea/Desktop/entrega/Entrega1/Pages/Proyecto.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJveWVjdG8ucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Mateo Marquez/Desktop/Actualizar/BlazorFrontEnd/Pages/Proyecto_linea.razor]
+[C:/Users/dhzea/Desktop/entrega/Entrega1/Pages/Proyecto_linea.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJveWVjdG9fbGluZWEucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Mateo Marquez/Desktop/Actualizar/BlazorFrontEnd/Pages/PruebaRolesYRutas.razor]
+[C:/Users/dhzea/Desktop/entrega/Entrega1/Pages/PruebaRolesYRutas.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJ1ZWJhUm9sZXNZUnV0YXMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Mateo Marquez/Desktop/Actualizar/BlazorFrontEnd/Pages/Rol.razor]
+[C:/Users/dhzea/Desktop/entrega/Entrega1/Pages/Rol.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUm9sLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Mateo Marquez/Desktop/Actualizar/BlazorFrontEnd/Pages/Termino_clave.razor]
+[C:/Users/dhzea/Desktop/entrega/Entrega1/Pages/Termino_clave.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVGVybWlub19jbGF2ZS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Mateo Marquez/Desktop/Actualizar/BlazorFrontEnd/Pages/Tipo_producto.razor]
+[C:/Users/dhzea/Desktop/entrega/Entrega1/Pages/Tipo_producto.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVGlwb19wcm9kdWN0by5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Mateo Marquez/Desktop/Actualizar/BlazorFrontEnd/_Imports.razor]
+[C:/Users/dhzea/Desktop/entrega/Entrega1/_Imports.razor]
 build_metadata.AdditionalFiles.TargetPath = X0ltcG9ydHMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Mateo Marquez/Desktop/Actualizar/BlazorFrontEnd/Layout/MainLayout.razor]
+[C:/Users/dhzea/Desktop/entrega/Entrega1/Layout/MainLayout.razor]
 build_metadata.AdditionalFiles.TargetPath = TGF5b3V0XE1haW5MYXlvdXQucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = b-msf2p0x9on
 
-[C:/Users/Mateo Marquez/Desktop/Actualizar/BlazorFrontEnd/Layout/NavMenu.razor]
+[C:/Users/dhzea/Desktop/entrega/Entrega1/Layout/NavMenu.razor]
 build_metadata.AdditionalFiles.TargetPath = TGF5b3V0XE5hdk1lbnUucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = b-9m9x83kvrv
