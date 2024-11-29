@@ -1,12 +1,21 @@
-﻿<div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
+﻿<div class="top-row d-flex align-items-center px-3">
+    <!-- Botón para alternar el menú -->
+    <button class="navbar-toggler" @onclick="ToggleNavMenu" aria-label="Toggle navigation">
+        <span class="bi bi-list" aria-hidden="true"></span>
+        <img src="https://cdn-icons-png.flaticon.com/512/5166/5166492.png" alt="Flecha" class="navbar-toggler-icon" />
+    </button>
+</div>
+
+<!-- Sidebar con la clase dinámica para colapso -->
+<div class="@NavMenuCssClass nav-scrollable">
     <nav class="flex-column d-flex h-100">
         <div class="nav-items-container flex-grow-1">
+            <!-- Enlaces de navegación -->
             <div class="nav-item px-3">
                 <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
                     <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
                 </NavLink>
             </div>
-            
              <div class="nav-item px-3">
                 <NavLink class="nav-link" href="aa_proyecto">
                     <span class="bi bi-list-rocket-nav-menu" aria-hidden="true"></span> Aa proyecto 
@@ -88,16 +97,26 @@
                 <span class="bi bi-list-book-nav-menu" aria-hidden="true"></span> Logout
             </NavLink>
         </div>
+        <!-- Enlace de logout -->
+        <div class="nav-item px-3 logout-container mt-auto">
+            <NavLink class="nav-link" href="logout">
+                <span class="bi bi-list-book-nav-menu" aria-hidden="true"></span> Logout
+            </NavLink>
+        </div>
     </nav>
 </div>
+
 
 @code {
     private bool collapseNavMenu = true;
 
-    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : "";
+
+    private string TogglerCssClass => collapseNavMenu ? "" : "collapse";
 
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
     }
 }
+

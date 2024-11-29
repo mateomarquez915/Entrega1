@@ -1,41 +1,68 @@
+/* Estructura general */
 .page[b-msf2p0x9on] {
     position: relative;
     display: flex;
     flex-direction: column;
+    background-color: rgba(33, 33, 33, 0.9); /* Fondo negro */
+    color: #add8e6; /* Color blanco para el texto general */
 }
 
+/* Contenedor de main */
 main[b-msf2p0x9on] {
     flex: 1;
-}
-
-.sidebar[b-msf2p0x9on] {
-    background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #1609cc 70%);
-}
-
-.top-row[b-msf2p0x9on] {
-    background-color: #f7f7f7;
-    border-bottom: 1px solid #d6d5d5;
-    justify-content: flex-end;
-    height: 3.5rem;
+    background-color: rgba(44, 44, 44, 0.9); /* Fondo oscuro */
+    padding: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+    border-radius: 8px;
+    margin: 1rem;
+    transition: background-color 0.3s ease;
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    justify-content: center; /* Centrado vertical */
+    align-items: center; /* Centrado horizontal */
 }
 
-    .top-row[b-msf2p0x9on]  a, .top-row[b-msf2p0x9on]  .btn-link {
-        white-space: nowrap;
-        margin-left: 1.5rem;
-        text-decoration: none;
-    }
+/* Estilo para los títulos en la página */
+h1[b-msf2p0x9on] {
+    color: #ff6347; /* Color naranja para el título */
+}
 
-    .top-row[b-msf2p0x9on]  a:hover, .top-row[b-msf2p0x9on]  .btn-link:hover {
-        text-decoration: underline;
-    }
+/* Estilo para los párrafos */
+p[b-msf2p0x9on] {
+    color: #add8e6; /* Color azul claro para los párrafos */
+}
 
-    .top-row[b-msf2p0x9on]  a:first-child {
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
+/* Para los enlaces dentro del sidebar */
+.sidebar a:hover[b-msf2p0x9on] {
+    background-color: rgba(77, 77, 77, 1); /* Fondo gris claro */
+    color: black;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
 
+/* Barra superior */
+
+/* Estilo para los enlaces en la barra superior */
+.top-row[b-msf2p0x9on]  a, .top-row[b-msf2p0x9on]  .btn-link {
+    white-space: nowrap;
+    margin-left: 1.5rem;
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+/* Efecto hover para los enlaces en la barra superior */
+.top-row[b-msf2p0x9on]  a:hover, .top-row[b-msf2p0x9on]  .btn-link:hover {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    color: lightgray;
+}
+
+.top-row[b-msf2p0x9on]  a:first-child {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Responsive */
 @media (max-width: 640.98px) {
     .top-row[b-msf2p0x9on] {
         justify-content: space-between;
@@ -46,13 +73,13 @@ main[b-msf2p0x9on] {
     }
 }
 
-@media (min-width: 641px) {
+@media (min-width: 941px) {
     .page[b-msf2p0x9on] {
         flex-direction: row;
+        align-items: center; /* Centrado horizontal */
     }
 
     .sidebar[b-msf2p0x9on] {
-        width: 250px;
         height: 100vh;
         position: sticky;
         top: 0;
